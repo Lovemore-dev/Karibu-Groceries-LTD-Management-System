@@ -7,7 +7,7 @@
     "globals": "^17.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.2.7",
-     "prettier": "^3.7.4"
+    "prettier": "^3.7.4"
   },
   "scripts": {
     "lint": "eslint .",

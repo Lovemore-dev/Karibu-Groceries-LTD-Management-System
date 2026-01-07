@@ -8,7 +8,7 @@
 html,
 body {
   height: 100%;
-  font-family: "Inter", Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   line-height: 1.6;
   color: #333;
 }
@@ -204,8 +204,8 @@ footer {
   display: grid;
   grid-template-columns: 1fr;
   /* background-color: aquamarine; */
-  background: linear-gradient(rgba(0, 0, 0, 0.5)),
-    url(/images/high-angle-beans-arrangement-concept.jpg);
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5)), url(/images/high-angle-beans-arrangement-concept.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -312,7 +312,8 @@ footer {
 .welcomeSideLogin {
   display: grid;
   grid-template-columns: 1fr;
-  background: linear-gradient(rgba(0, 0, 0, 0.5)),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5)),
     url(/images/different-kinds-bean-seeds-lentil-peas-dishes-black.jpg);
   background-position: center;
   background-repeat: no-repeat;
@@ -332,7 +333,6 @@ footer {
   color: white;
   font-size: 44px;
 }
-
 
 /* Style for login account */
 .loginSide {
