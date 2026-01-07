@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <main>
+      <header class="dashboard">
+        <h2>Manager Dashboard</h2>
+        <div class="welcomeAndBranch">
+          <div class="welcomeUser">
+            <h5>Welcome back, Lovemore Odongo</h5>
+          </div>
+          <div class="branchName">
+            <h5>Branch: Kampala Main</h5>
+            <button type="button" id="logoutButton">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- overview cards -->
+      <section class="backgroundView">
+        <div class="overview">
+          <!-- total stock cards -->
+          <div class="overviewCards">
+            <p>Total Stock Value</p>
+            <h5>Ugx 50,000,000</h5>
+            <p>+12% from last month</p>
+          </div>
+          <!-- Total sales -->
+          <div class="overviewCards">
+            <p>Today's Sales</p>
+            <h5>Ugx 250,000</h5>
+            <p>23 Transactions</p>
+          </div>
+          <!-- low stock cards -->
+          <div class="overviewCards">
+            <p>Low Stock Items</p>
+            <h5>8</h5>
+            <p>Requires attention</p>
+          </div>
+          <!-- Credit sales due cards -->
+          <div class="overviewCards">
+            <p>Credit Sales Due</p>
+            <h5>Ugx 100,000</h5>
+            <p>5 pending payments</p>
+          </div>
+        </div>
+        <br />
+        <h5>Quick Actions</h5>
+        <div class="quickActions">
+          <!-- Rcord Procurement -->
+          <div class="overviewCards">
+            <p>Record Procurement</p>
+            <p>Add new produce to inventory</p>
+          </div>
+          <!-- Record Sales -->
+          <div class="overviewCards">
+            <p>Record Sale</p>
+            <p>Process a new sale transaction</p>
+          </div>
+          <!-- Credit Sale -->
+          <div class="overviewCards">
+            <p>Credit Sale</p>
+            <p>Record deferred payment</p>
+          </div>
+          <!-- View Inventory -->
+          <div class="overviewCards">
+            <p>View Inventory</p>
+            <p>Manage stock and prices</p>
+          </div>
+        </div>
+        <br>
+        <!-- Two cards for low stock alert and reccent sales -->
+        <div class="stockAndSales">
+          <!-- card for low stock alerts -->
+          <div class="lowStockAlert">
+            <p>Low Stock alerts</p>
+          </div>
+          <!-- Recent sales -->
+          <div class="recentSales">
+            <p>Recent Sales</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

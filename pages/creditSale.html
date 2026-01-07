@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KGL - Credit Sale</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="backgroundView">
+      <!-- Page Heading -->
+      <h1 style="margin-left: 20px">Record Produce Sold on Credit</h1>
+      <p style="margin-left: 20px">
+        Fill in the details below to log a credit/deferred payment sale
+      </p>
+
+      <!-- Form Container -->
+      <div class="formDesign">
+        <form id="creditSalesForm">
+          <!-- Buyer Details Section -->
+          <section>
+            <h2>Buyer Details</h2>
+            <div class="Details">
+              <!-- Buyer Name: alphanumeric, ≥ 2 characters -->
+              <label for="buyerName">
+                <p>Buyer Name</p>
+                <input
+                  id="buyerName"
+                  name="buyerName"
+                  type="text"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., Odongo Enterprises"
+                />
+              </label>
+
+              <!-- National ID: valid NIN format -->
+              <label for="nationalId">
+                <p>National ID (NIN)</p>
+                <input
+                  id="nationalId"
+                  name="nationalId"
+                  type="text"
+                  pattern="[A-Z0-9]{13}"
+                  required
+                  placeholder="e.g., CM123456789AB"
+                />
+              </label>
+
+              <!-- Location: alphanumeric, ≥ 2 characters -->
+              <label for="location">
+                <p>Location</p>
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., Bweyale"
+                />
+              </label>
+
+              <!-- Contact: valid phone format -->
+              <label for="buyerContact">
+                <p>Buyer Contact</p>
+                <input
+                  id="buyerContact"
+                  name="buyerContact"
+                  type="tel"
+                  pattern="^0[0-9]{9}$"
+                  required
+                  placeholder="e.g., 0771234567"
+                />
+              </label>
+            </div>
+          </section>
+
+          <!-- Transaction Details Section -->
+          <section>
+            <h2>Transaction Details</h2>
+            <div class="Details">
+              <!-- Amount Due: numeric, ≥ 5 digits -->
+              <label for="amountDue">
+                <p>Amount Due (UgX)</p>
+                <input
+                  id="amountDue"
+                  name="amountDue"
+                  type="number"
+                  min="10000"
+                  required
+                  placeholder="e.g., 1500000"
+                />
+              </label>
+
+              <!-- Sales Agent Name: alphanumeric, ≥ 2 characters -->
+              <label for="agentName">
+                <p>Sales Agent Name</p>
+                <input
+                  id="agentName"
+                  name="agentName"
+                  type="text"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., Lovemore KGL"
+                />
+              </label>
+
+              <!-- Due Date -->
+              <label for="dueDate">
+                <p>Due Date</p>
+                <input id="dueDate" name="dueDate" type="date" required />
+              </label>
+            </div>
+          </section>
+
+          <!-- Produce Details Section -->
+          <section>
+            <h2>Produce Details</h2>
+            <div class="Details">
+              <!-- Produce Name: alphanumeric, ≥ 2 characters -->
+              <label for="produceName">
+                <p>Produce Name</p>
+                <select id="produceName" name="produceName" required>
+                  <option value="">Select Produce</option>
+                  <option value="Beans">Beans</option>
+                  <option value="Grain Maize">Grain Maize</option>
+                  <option value="Cow Peas">Cow Peas</option>
+                  <option value="G-nuts">G-nuts</option>
+                  <option value="Soybeans">Soybeans</option>
+                </select>
+              </label>
+
+              <!-- Produce Type -->
+              <label for="produceType">
+                <p>Produce Type</p>
+                <input
+                  id="produceType"
+                  name="produceType"
+                  type="text"
+                  pattern="[A-Za-z]{2,}"
+                  required
+                  placeholder="e.g., Grains"
+                />
+              </label>
+
+              <!-- Tonnage -->
+              <label for="tonnage">
+                <p>Tonnage (kgs)</p>
+                <input
+                  id="tonnage"
+                  name="tonnage"
+                  type="number"
+                  min="1"
+                  required
+                  placeholder="e.g., 1000"
+                />
+              </label>
+
+              <!-- Date of Dispatch -->
+              <label for="dispatchDate">
+                <p>Date of Dispatch</p>
+                <input
+                  id="dispatchDate"
+                  name="dispatchDate"
+                  type="date"
+                  required
+                />
+              </label>
+            </div>
+          </section>
+
+          <!-- Action Buttons -->
+          <div class="formActions">
+            <button type="reset">Cancel</button> &nbsp;
+            <button type="submit" style="background-color: green; color: white">
+              Save Credit Sale
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

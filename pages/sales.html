@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KGL - Produce Sales</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="backgroundView">
+      <!-- Page Heading -->
+      <h1 style="margin-left: 20px">Record New Produce Sale</h1>
+      <p style="margin-left: 20px">
+        Fill in the details below to log a new produce sale
+      </p>
+
+      <!-- Form Container -->
+      <div class="formDesign">
+        <form id="salesForm">
+          <!-- Produce Details Section -->
+          <section>
+            <h2>Produce Details</h2>
+            <div class="Details">
+              <!-- Produce Name -->
+              <label for="produceName">
+                <p>Produce Name</p>
+                <select id="produceName" name="produceName" required>
+                  <option value="">Select Produce</option>
+                  <option value="Beans">Beans</option>
+                  <option value="Grain Maize">Grain Maize</option>
+                  <option value="Cow Peas">Cow Peas</option>
+                  <option value="G-nuts">G-nuts</option>
+                  <option value="Soybeans">Soybeans</option>
+                </select>
+              </label>
+
+              <!-- Tonnage -->
+              <label for="tonnage">
+                <p>Tonnage (kgs)</p>
+                <input
+                  id="tonnage"
+                  name="tonnage"
+                  type="number"
+                  min="1"
+                  required
+                  placeholder="e.g., 500"
+                />
+              </label>
+            </div>
+          </section>
+
+          <!-- Transaction Details Section -->
+          <section>
+            <h2>Transaction Details</h2>
+            <div class="Details">
+              <!-- Amount Paid -->
+              <label for="amountPaid">
+                <p>Amount Paid (UgX)</p>
+                <input
+                  id="amountPaid"
+                  name="amountPaid"
+                  type="number"
+                  min="10000"
+                  required
+                  placeholder="e.g., 1500000"
+                />
+              </label>
+
+              <!-- Date -->
+              <label for="saleDate">
+                <p>Date of Sale</p>
+                <input id="saleDate" name="saleDate" type="date" required />
+              </label>
+
+              <!-- Time -->
+              <label for="saleTime">
+                <p>Time of Sale</p>
+                <input id="saleTime" name="saleTime" type="time" required />
+              </label>
+            </div>
+          </section>
+
+          <!-- Buyer & Agent Details Section -->
+          <section>
+            <h2>Buyer & Agent Details</h2>
+            <div class="Details">
+              <!-- Buyer Name -->
+              <label for="buyerName">
+                <p>Buyer Name</p>
+                <input
+                  id="buyerName"
+                  name="buyerName"
+                  type="text"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., John Doe Enterprises"
+                />
+              </label>
+
+              <!-- Sales Agent Name -->
+              <label for="agentName">
+                <p>Sales Agent Name</p>
+                <input
+                  id="agentName"
+                  name="agentName"
+                  type="text"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., Sarah KGL"
+                />
+              </label>
+
+              <!-- Branch Name -->
+              <label for="branchName">
+                <p>Branch Name</p>
+                <input
+                  id="branchName"
+                  name="branchName"
+                  type="text"
+                  value="Kampala Central Branch"
+                  disabled
+                />
+              </label>
+            </div>
+          </section>
+
+          <!-- Action Buttons -->
+          <div class="formActions">
+            <button type="reset">Cancel</button>
+            <button type="submit" style="background-color: green; color: white">
+              Save Sale
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,502 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+/* style for the header section */
+.heeaderSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: first baseline;
+  padding-top: 10px;
+}
+
+/* styling the navigation section */
+.navSection {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(242, 253, 251);
+  position: fixed;
+  width: 100%;
+  padding-bottom: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/* style for heading 1 in the navigation section */
+.navSection h1 {
+  padding-top: 10px;
+  font-weight: bolder;
+  font-size: 40px;
+  padding-left: 10px;
+  padding-right: 0px;
+}
+
+/* changing the display of the navigation bar  */
+.navBar {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Styling the navigation bar link items */
+.navBarLinks {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  text-align: right;
+}
+
+/* changing the display of the list items */
+.navBarLinks li {
+  list-style: none;
+}
+
+/* removing the underline from the navigation items */
+.navBarLinks a {
+  text-decoration: none;
+}
+
+/* styling the buttons  */
+.buttonReq {
+  padding: 9px;
+  border-style: none;
+  border-radius: 10px;
+  background-color: rgb(60, 181, 60);
+}
+
+.buttonLog {
+  padding: 9px;
+  border-style: none;
+  border-radius: 10px;
+  background-color: rgb(169, 233, 231);
+}
+/* styling the items in the hero section */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  background-image: url(/images/different-type-raw-dry-legumes-composition-marble-table-surface.jpg);
+  height: 95vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  align-items: left;
+  justify-content: end;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+/* styling the heading in the hero section */
+.heroSection h1 {
+  color: rgb(255, 255, 255);
+  margin-left: 20px;
+}
+
+/* Styling the paragraph in the hero section */
+.heroSection p {
+  color: rgb(255, 255, 255);
+  margin-left: 20px;
+}
+
+/* styling the buttons in the hero section */
+.callButtons {
+  padding-left: 20px;
+}
+.button1 {
+  padding: 9px;
+  border-style: none;
+  border-radius: 10px;
+  background-color: rgb(60, 181, 60);
+}
+
+.button2 {
+  background-color: rgb(195, 192, 192);
+  padding: 9px;
+  border-style: none;
+  border-radius: 10px;
+}
+
+/* styling the main the section */
+/* adjusting the padding for the main section */
+.mainSection {
+  padding-left: 10px;
+}
+
+/* putting the cards in grids */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+/* Styling each card */
+.procurementCard {
+  border-style: groove;
+  border-radius: 8px;
+  box-shadow: 10px;
+  margin: 5px;
+  gap: 10px;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.SalesAndCreditCard {
+  border-style: groove;
+  border-radius: 8px;
+  box-shadow: 10px;
+  margin: 5px;
+  gap: 10px;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.InsightfulReportingCard {
+  border-style: groove;
+  border-radius: 8px;
+  box-shadow: 10px;
+  margin: 5px;
+  gap: 10px;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.cards p {
+  padding: 10px;
+}
+
+.mainSection {
+  padding: 10px;
+}
+
+.mainSection p {
+  padding: 10px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(242, 253, 251);
+  /* text-align: center; */
+}
+
+/*..........................................................................................................*/
+/* Css styles for the register page */
+.mainRegister {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  width: 100%;
+}
+
+.welcomeSide {
+  display: grid;
+  grid-template-columns: 1fr;
+  /* background-color: aquamarine; */
+  background: linear-gradient(rgba(0, 0, 0, 0.5)),
+    url(/images/high-angle-beans-arrangement-concept.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0 10%;
+}
+
+.welcomeSide h4 {
+  padding-bottom: 10%;
+  padding-top: 5%;
+  color: white;
+  font-size: large;
+}
+.welcomeSide h2 {
+  padding-left: 10%;
+  padding-right: 8%;
+  color: white;
+  font-size: 44px;
+}
+
+.welcomeSide p {
+  padding-bottom: 35%;
+  padding-left: 15%;
+  padding-right: 10%;
+  color: white;
+  font-size: medium;
+}
+
+/*..........................................................................................................*/
+/* Style for create account */
+.createAccountSide {
+  padding: 5% 15%;
+  line-height: 1.5;
+}
+/* customizing the details  */
+#firstName {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#lastName {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#workEmail {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+/* making role and branch to appear into two columns using grid */
+.roleAndBranch {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+#roles {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#branches {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#createPassword {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#confirmPassword {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgb(2, 130, 87);
+  color: white;
+  border-style: none;
+  font-weight: bold;
+  font-size: medium;
+}
+
+/*..........................................................................................................*/
+/* Css styles for login page */
+.mainLogin {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  width: 100%;
+  height: 100vh;
+}
+
+.welcomeSideLogin {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: linear-gradient(rgba(0, 0, 0, 0.5)),
+    url(/images/different-kinds-bean-seeds-lentil-peas-dishes-black.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0 10%;
+}
+
+.welcomeSideLogin h4 {
+  padding-bottom: 10%;
+  padding-top: 15%;
+  color: white;
+  font-size: large;
+}
+.welcomeSideLogin h2 {
+  padding-left: 10%;
+  padding-right: 8%;
+  color: white;
+  font-size: 44px;
+}
+
+
+/* Style for login account */
+.loginSide {
+  padding: 0 10%;
+  line-height: 1.5;
+}
+
+#workEmail {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#enterPassword {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgb(2, 130, 87);
+  color: white;
+  border-style: none;
+  font-weight: bold;
+  font-size: medium;
+}
+/* Password eye icon */
+.fa-eye,
+.fa-eye-slash {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
+.fa-eye:hover,
+.fa-eye-slash:hover {
+  color: #028256;
+}
+
+/* Spinner animation */
+.fa-spin {
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button disabled state */
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/*..........................................................................................................*/
+.dashboard {
+  box-shadow: 0 0 5px black;
+}
+
+.welcomeAndBranch {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.branchName {
+  display: flex;
+  gap: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+#logoutButton {
+  color: white;
+  background-color: green;
+  padding: 2px;
+  border-radius: 8px;
+}
+.backgroundView {
+  background-color: rgb(239, 255, 248, 0.5);
+}
+.overview {
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+  justify-content: space-around;
+}
+
+.overviewCards {
+  border-style: groove;
+  width: 22.5%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  line-height: 1.5;
+}
+
+.quickActions {
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+  justify-content: space-around;
+}
+
+.stockAndSales {
+  display: flex;
+  gap: 20px;
+}
+.lowStockAlert {
+  border-style: groove;
+  width: 50%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  line-height: 1.5;
+}
+
+.recentSales {
+  border-style: groove;
+  width: 50%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  line-height: 1.5;
+}
+
+.formDesign {
+  padding: 0 20px;
+  background-color: white;
+  line-height: 1.5;
+  margin: 1rem 2.5rem;
+  border-radius: 8px;
+}
+
+.formDesign h2 {
+  box-shadow: 0 2px rgba(0, 0, 0, 0.1);
+  line-height: 2;
+}
+
+.Details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 10px;
+}
+label {
+  display: grid;
+  grid-template-columns: (auto-fit, minmax(250px, 1fr));
+}
+.formActions {
+  text-align: right;
+}
