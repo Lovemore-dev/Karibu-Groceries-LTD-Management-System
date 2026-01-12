@@ -34,45 +34,42 @@
         <p>Enter your details to get started</p>
         <br />
         <!-- account creation form  -->
-        <form action="" method="post">
-          First Name <br />
-          <input type="text" placeholder="Enter your first name" id="firstName" />
+        <form action="/register" method="post">
+          <label for="firstName">First Name</label>
+          <input type="text" placeholder="Enter your first name" id="firstName" required /><br />
+          <label for="lastName">Last Name</label>
+          <input type="text" placeholder="Enter your Last name" id="lastName" required/>
           <br />
-          Last Name <br />
-          <input type="text" placeholder="Enter your Last name" id="lastName" />
-          <br />
-          Work Email <br />
-          <input type="text" placeholder="Enter your work email" id="workEmail" />
+          <label for="workEmail">Work Email</label>
+          <input type="email" placeholder="Enter your work email" id="workEmail" name="email" required/>
           <br />
           <div class="roleAndBranch">
             <div class="role">
-              Role <br />
-              <select name="" id="roles">
-                <option value="">Select Role</option>
-                <option value="">Sales Agent</option>
-                <option value="">Manager</option>
-                <option value="">Director</option>
+              <label for="Role">Role</label>
+              <select name="" id="roles" required>
+                <option value="Sales Agent">Sales Agent</option>
+                <option value="Manager">Manager</option>
+                <option value="Director">Director</option>
               </select>
             </div>
             <div class="branch">
-              Branch <br />
-              <select name="" id="branches">
-                <option value="">Select Branch</option>
-                <option value="">Branch 1</option>
-                <option value="">Branch 2</option>
+              <label for="branch">Branch</label>
+              <select name="" id="branches" required>
+                <option value="Branch 1">Branch 1</option>
+                <option value="Branch 2">Branch 2</option>
               </select>
             </div>
           </div>
-          Create Password <br />
+          <label for="createPassword">Create Password</label>
           <input
             type="password"
-            name=""
-            id="createPassword"
+            name="createPassword"
+            id="enterPassword"
             placeholder="Create a strong password"
+            required
           />
-          <br />
-          Confirm Password <br />
-          <input type="password" name="" id="confirmPassword" placeholder="Retype your password" />
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Retype your password" required />
           <br />
           <button class="submitButton" type="submit">Create Account</button>
           <br />

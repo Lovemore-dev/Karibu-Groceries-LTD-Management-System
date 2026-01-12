@@ -44,7 +44,7 @@ function validateEmail() {
   }
 
   if (!email.includes('@') || !email.includes('.')) {
-    alert('Please enter a valid email');
+    alert('Please enter a valid email having @ and .');
     return false;
   }
 
@@ -100,6 +100,8 @@ function handleLogin() {
     loginButton.innerHTML = 'Login';
   }, 1500);
 }
+
+
 
 // Setup everything
 function init() {

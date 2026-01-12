@@ -198,6 +198,7 @@ footer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   width: 100%;
+  height: 97vh;
 }
 
 .welcomeSide {
@@ -306,7 +307,7 @@ footer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   width: 100%;
-  height: 100vh;
+  height: 97vh;
 }
 
 .welcomeSideLogin {
@@ -500,3 +501,4 @@ label {
 .formActions {
   text-align: right;
 }
+

@@ -44,30 +44,28 @@
         <br />
         <!-- account login form  -->
         <form action="/login" method="post">
-          <label for="workEmail">Email</label><br />
+          <label for="workEmail">Email</label>
           <input
             type="email"
             id="workEmail"
             name="email"
             placeholder="Enter your work email"
             required
-          /><br /><br />
+          /><br />
 
-          <label for="enterPassword">Password</label><br />
+          <label for="enterPassword">Password</label>
           <input
             type="password"
             id="enterPassword"
             name="password"
             placeholder="Enter your password"
             required
-          /><br />
+          />
 
+          <button class="submitButton" type="submit">Login</button><br /><br />
           <p style="text-align: right; color: rgb(46, 179, 46)">
             <a href="forgot-password.html">Forgot Password?</a>
           </p>
-
-          <button class="submitButton" type="submit">Login</button><br /><br />
-
           <a href="register.html"
             ><p style="text-align: center">Don't have an account? Register</p></a
           >
@@ -84,7 +82,9 @@
         </script>
         Karibu Groceries Limited
       </p>
+
+      <hr />
     </footer>
-    <script src="/js/index.js"></script>
+    <script src="/js/login.js"></script>
   </body>
 </html>
