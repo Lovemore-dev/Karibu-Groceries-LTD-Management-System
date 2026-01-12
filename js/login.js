@@ -101,8 +101,6 @@ function handleLogin() {
   }, 1500);
 }
 
-
-
 // Setup everything
 function init() {
   // Add password toggle
