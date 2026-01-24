@@ -13,5 +13,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
+  },
+  "lint-staged": {
+    "*.{js,css,html}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
