@@ -9,6 +9,15 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link rel="stylesheet" href="/css/toast.css" />
+    <style>
+      .messageStyle {
+        font-size: small;
+        /* font-weight: bold; */
+        min-height: 10px;
+        color: red;
+      }
+    </style>
   </head>
   <body>
     <!-- main login section -->
@@ -43,36 +52,29 @@
         </center>
         <br />
         <!-- account login form  -->
-        <form action="/login" method="post">
-          <label for="workEmail">Email</label>
-          <input
-            type="email"
-            id="workEmail"
-            name="email"
-            placeholder="Enter your work email"
-            required
-          /><br />
-
+        <form action="/pages/dashboard.html" id="loginForm" method="post">
+          <label for="UserName">Username</label>
+          <input type="text" id="UserName" name="UserName" placeholder="Enter your username" />
+          <div id="messageBox" class="messageStyle"></div>
+          <div id="toast"></div>
           <label for="enterPassword">Password</label>
           <input
             type="password"
             id="enterPassword"
             name="password"
             placeholder="Enter your password"
-            required
           />
-
-          <button class="submitButton" type="submit">Login</button><br /><br />
+          <div id="passwordmessageBox" class="messageStyle"></div>
+          <button id="loginBtn" class="submitButton" type="submit">Login</button><br /><br />
           <p style="text-align: right; color: rgb(46, 179, 46)">
             <a href="forgot-password.html">Forgot Password?</a>
           </p>
-          <a href="register.html"
+          <a href="mailto:"
             ><p style="text-align: center">Don't have an account? Contact Admin</p></a
           >
         </form>
       </div>
     </main>
-
     <!-- footer section -->
     <footer class="footerSection">
       <p>

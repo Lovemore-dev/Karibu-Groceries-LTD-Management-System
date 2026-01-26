@@ -199,8 +199,7 @@ footer {
   display: flex;
   justify-content: center;
   background-color: rgb(242, 253, 251);
-  /* text-align: center; */
-}
+  }
 
 /*..........................................................................................................*/
 /* Css styles for the register page */
@@ -262,8 +261,12 @@ footer {
   padding: 6px;
   border-radius: 5px;
 }
-
-#workEmail {
+#userName {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+#workEmailUserName {
   width: 100%;
   padding: 6px;
   border-radius: 5px;
@@ -351,7 +354,7 @@ footer {
   line-height: 1.5;
 }
 
-#workEmail {
+#UserName {
   width: 100%;
   padding: 6px;
   border-radius: 5px;
@@ -557,3 +560,4 @@ label {
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
+

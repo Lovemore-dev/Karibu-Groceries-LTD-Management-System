@@ -1,9 +1,8 @@
 // Get form elements
-const form = document.querySelector('form');
-const emailInput = document.getElementById('workEmail');
+const loginForm = document.getElementById('loginForm');
+const usernameInput = document.getElementById('UserName');
 const passwordInput = document.getElementById('enterPassword');
-const loginButton = document.querySelector('.submitButton');
-
+// const loginButton = document.getElementById('loginBtn');
 // Add password toggle
 function addPasswordToggle() {
   const eyeIcon = document.createElement('i');
@@ -23,7 +22,7 @@ function addPasswordToggle() {
   wrapper.appendChild(eyeIcon);
 
   // Toggle password visibility
-  eyeIcon.addEventListener('click', function () {
+  eyeIcon.addEventListener('click', () => {
     if (passwordInput.type === 'password') {
       passwordInput.type = 'text';
       eyeIcon.className = 'fas fa-eye-slash';
@@ -33,92 +32,69 @@ function addPasswordToggle() {
     }
   });
 }
+// Toast notification function
 
-// Validate email
-function validateEmail() {
-  const email = emailInput.value.trim();
+function showToast(message, type) {
+  const toast = document.getElementById('toast');
 
-  if (!email) {
-    alert('Please enter your email');
-    return false;
+  // 1. Set the text
+  toast.innerText = message;
+
+  // 2. Reset classes to base, then add the specific type
+  // This ensures we don't have both 'success' and 'error' at the same time
+  toast.className = ''; // clear previous classes
+
+  if (type === 'success') {
+    toast.classList.add('success');
+  } else if (type === 'error') {
+    toast.classList.add('error');
   }
 
-  if (!email.includes('@') || !email.includes('.')) {
-    alert('Please enter a valid email having @ and .');
-    return false;
-  }
+  // 3. Add 'show' class to trigger the CSS animation
+  // We use a small timeout to ensure the browser processes the class change
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
 
-  return true;
+  // 4. Hide it after 3 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
 }
 
-// Validate password
-function validatePassword() {
+addPasswordToggle();
+
+// validate user details
+const validateUser = () => {
+  const username = usernameInput.value;
   const password = passwordInput.value;
 
-  if (!password) {
-    alert('Please enter your password');
-    return false;
+  const usernames = ['kgl_admin', 'kgl_sales_agent', 'kgl_director'];
+  const passwords = 'groceries2026';
+  const roles = ['Manager', 'Sales_Agent', 'Director'];
+
+  if (username === '' || password === '') {
+    showToast(`Please enter both username and password!`);
+  } else if (!password) {
+    showToast(`Incorrect password. Please try again.`);
+  } else if (!username) {
+    showToast(`Username does not exist. Please try again.`);
+  } else if (usernames.includes(username) && passwords === password) {
+    showToast(`Login successful!`);
+
+    // Store user details in local storage
+    const userDetails = {
+      username,
+      firstName: 'Lovemore',
+      lastname: 'Odongo',
+      role: roles[usernames.indexOf(username)],
+    };
+    localStorage.setItem('userDetails', JSON.stringify(userDetails));
+    window.location.href = '/pages/dashboard.html';
   }
-
-  if (password.length < 6) {
-    alert('Password must be at least 6 characters');
-    return false;
-  }
-
-  return true;
-}
-
-// Handle login
-function handleLogin() {
-  // Validate
-  if (!validateEmail() || !validatePassword()) {
-    return;
-  }
-
-  // Get values
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  // Show loading
-  loginButton.disabled = true;
-  loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-
-  // Simulate login
-  setTimeout(function () {
-    // Demo credentials
-    if (email === 'admin@karibu.com' && password === 'demo123') {
-      alert('Login successful! Welcome to Karibu Groceries.');
-      emailInput.value = '';
-      passwordInput.value = '';
-    } else {
-      alert('Login failed. Try: admin@karibu.com / demo123');
-      passwordInput.value = '';
-    }
-
-    // Reset button
-    loginButton.disabled = false;
-    loginButton.innerHTML = 'Login';
-  }, 1500);
-}
-
-// Setup everything
-function init() {
-  // Add password toggle
-  addPasswordToggle();
-
-  // Handle form submission
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    handleLogin();
-  });
-
-  // Press Enter to submit
-  document.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      handleLogin();
-    }
-  });
-}
-
-// Start when page loads
-window.addEventListener('DOMContentLoaded', init);
+};
+// Handle form submission
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  validateUser();
+});
