@@ -2,8 +2,8 @@
 #toast {
   visibility: hidden; /* Hidden by default */
   min-width: 20px;
-  background-color: #ffffff; /* Fallback color */
-  color: #ff0000;
+  /* background-color: #ffffff; Fallback color */
+  /* color: #ffffff; */
   text-align: center;
   border-radius: 4px;
   padding: 10px;
@@ -35,5 +35,6 @@
 
 #toast.error {
   background-color: #dc3545; /* Red */
+  color: #fff;
   box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }

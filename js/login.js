@@ -66,32 +66,39 @@ addPasswordToggle();
 
 // validate user details
 const validateUser = () => {
-  const username = usernameInput.value;
+  const username = usernameInput.value.trim();
   const password = passwordInput.value;
+  const users = {
+    kgl_admin: { role: 'Manager', password: 'groceries2026' },
+  };
 
-  const usernames = ['kgl_admin', 'kgl_sales_agent', 'kgl_director'];
-  const passwords = 'groceries2026';
-  const roles = ['Manager', 'Sales_Agent', 'Director'];
-
+  // check if either field is empty
   if (username === '' || password === '') {
-    showToast(`Please enter both username and password!`);
-  } else if (!password) {
-    showToast(`Incorrect password. Please try again.`);
-  } else if (!username) {
-    showToast(`Username does not exist. Please try again.`);
-  } else if (usernames.includes(username) && passwords === password) {
-    showToast(`Login successful!`);
-
-    // Store user details in local storage
-    const userDetails = {
-      username,
-      firstName: 'Lovemore',
-      lastname: 'Odongo',
-      role: roles[usernames.indexOf(username)],
-    };
-    localStorage.setItem('userDetails', JSON.stringify(userDetails));
-    window.location.href = '/pages/dashboard.html';
+    showToast('Please enter both username and password!', 'error');
+    return;
   }
+  // if user exists
+  if (!users[username]) {
+    showToast(`Username does not exist. Please try again.`, `error`);
+    return;
+  }
+  // if password matches
+  if (users[username].password !== password) {
+    showToast(`Incorrect password. Please try again.`, `error`);
+    return;
+  }
+  // successfull condition
+  showToast(`Login successful!`, `success`);
+
+  // Store user details in local storage
+  const userDetails = {
+    username,
+    firstName: 'Lovemore',
+    lastname: 'Odongo',
+    role: users[username].role,
+  };
+  localStorage.setItem('userDetails', JSON.stringify(userDetails));
+  window.location.href = '/pages/dashboard.html';
 };
 // Handle form submission
 loginForm.addEventListener('submit', (e) => {

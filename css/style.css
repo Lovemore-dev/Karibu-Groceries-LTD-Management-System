@@ -488,7 +488,7 @@ footer {
 .mainProcurementPage {
   /* display: grid; */
   /* grid-template-columns: 0.3fr 1fr; */
-  padding: 2rem;
+  padding: 1rem;
   margin-right: 0;
   width: 100%;
   background-color: aliceblue;
@@ -512,8 +512,9 @@ footer {
   padding: 0 20px;
   background-color: white;
   line-height: 1.5;
-  margin-right: 5rem;
+  /* margin-right: 5rem; */
   border-radius: 8px;
+  max-width: 100%;
 }
 
 .formDesign h2 {
