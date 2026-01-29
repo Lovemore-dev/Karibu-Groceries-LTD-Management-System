@@ -1,0 +1,134 @@
+<div class="container-fluid">
+  <div class="row mb-4 pt-2">
+    <div class="col-12 border-bottom pb-3">
+      <h4 class="fw-semibold text-dark">Inventory & Sales Summary</h4>
+      <p class="text-muted small mb-0">Daily status for Kampala and Kiryandongo Branches</p>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="p-3 bg-white border rounded-3 shadow-sm">
+        <div class="text-muted small text-uppercase fw-bold">Total Stock</div>
+        <div class="d-flex align-items-baseline">
+          <h3 class="mb-0 me-2">14,200</h3>
+          <span class="text-muted small">kg</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="p-3 bg-white border rounded-3 shadow-sm">
+        <div class="text-muted small text-uppercase fw-bold">Today's Revenue</div>
+        <div class="d-flex align-items-baseline">
+          <h3 class="mb-0 me-2">1,250,000</h3>
+          <span class="text-muted small">UGX</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="p-3 bg-white border rounded-3 shadow-sm border-start border-warning border-4">
+        <div class="text-muted small text-uppercase fw-bold">Active Credit</div>
+        <div class="d-flex align-items-baseline">
+          <h3 class="mb-0 me-2">450,000</h3>
+          <span class="text-muted small">UGX</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="p-3 bg-white border rounded-3 shadow-sm border-start border-danger border-4">
+        <div class="text-muted small text-uppercase fw-bold">Alerts</div>
+        <h3 class="mb-0 text-danger">2 Items Low</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm border">
+        <div class="card-header bg-white py-3">
+          <h6 class="mb-0 fw-bold">Produce Stock by Branch (kg)</h6>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+              <thead class="bg-light">
+                <tr>
+                  <th class="ps-3">Produce</th>
+                  <th>Kampala</th>
+                  <th>Kiryandongo</th>
+                  <th class="text-end pe-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ps-3 fw-medium">Beans</td>
+                  <td>2,500</td>
+                  <td>1,800</td>
+                  <td class="text-end pe-3">
+                    <button class="btn btn-sm btn-light border">Details</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-3 fw-medium">Grain Maize</td>
+                  <td class="text-danger">850 <i class="bi bi-arrow-down"></i></td>
+                  <td>3,200</td>
+                  <td class="text-end pe-3">
+                    <button class="btn btn-sm btn-light border">Restock</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-3 fw-medium">Cow Peas</td>
+                  <td>4,000</td>
+                  <td>2,100</td>
+                  <td class="text-end pe-3">
+                    <button class="btn btn-sm btn-light border">Details</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm border h-100">
+        <div class="card-header bg-white py-3">
+          <h6 class="mb-0 fw-bold">Operational Tasks</h6>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <button
+              class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center py-3"
+              onclick="loadPage('procurement.html')"
+            >
+              <span><i class="bi bi-plus-square me-3 text-muted"></i>Record Incoming Produce</span>
+              <i class="bi bi-chevron-right small text-muted"></i>
+            </button>
+            <button
+              class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center py-3"
+              onclick="loadPage('sales.html')"
+            >
+              <span><i class="bi bi-cart me-3 text-muted"></i>Create New Sale</span>
+              <i class="bi bi-chevron-right small text-muted"></i>
+            </button>
+            <button
+              class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center py-3"
+              onclick="loadPage('credit_sales.html')"
+            >
+              <span><i class="bi bi-person-badge me-3 text-muted"></i>Review Credit Buyers</span>
+              <i class="bi bi-chevron-right small text-muted"></i>
+            </button>
+          </div>
+
+          <div class="mt-4 p-3 bg-light rounded-3">
+            <p class="small text-muted mb-0">
+              <strong>Policy Note:</strong> Minimum procurement amount is 1,000kg. Sales are only
+              permitted for items currently in stock.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
