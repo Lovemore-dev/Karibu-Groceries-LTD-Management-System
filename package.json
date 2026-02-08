@@ -7,17 +7,24 @@
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "nodemon": "^3.1.11",
     "prettier": "^3.8.1"
   },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "lint-staged": {
     "*.{js,css,html}": [
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1"
   }
 }
