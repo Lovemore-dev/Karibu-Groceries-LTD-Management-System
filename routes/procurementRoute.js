@@ -1,26 +1,22 @@
 const express = require('express');
 
 const router = express.Router();
+const {
+  getProcurements,
+  getProcurement,
+  createProcurement,
+  updateProcurement,
+  deleteProcurement,
+} = require('../controllers/procurementController');
 
-router.route('/').get((req, res) => {
-  res.status(200).json({ message: 'I am getting procurements' });
-});
+router.route('/').get(getProcurements);
 
-router.route('/').post((req, res) => {
-  res.status(200).json({ message: 'I am adding procurement' });
-});
+router.route('/:id').get(getProcurement);
 
-router.route('/:id').get((req, res) => {
-  res.status(200).json({ message: `I am getting procurement for ${req.params.id}` });
-});
+router.route('/').post(createProcurement);
 
+router.route('/:id').patch(updateProcurement);
 
-router.route('/:id').patch((req, res) => {
-  res.status(200).json({ message: `I am updating procurement for ${req.params.id}` });
-});
-
-router.route('/:id').delete((req, res) => {
-  res.status(200).json({ message: `I am deleting procurement for ${req.params.id}` });
-});
+router.route('/:id').delete(deleteProcurement);
 
 module.exports = router;
