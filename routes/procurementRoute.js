@@ -9,14 +9,7 @@ const {
   deleteProcurement,
 } = require('../controllers/procurementController');
 
-router.route('/').get(getProcurements);
-
-router.route('/:id').get(getProcurement);
-
-router.route('/').post(createProcurement);
-
-router.route('/:id').patch(updateProcurement);
-
-router.route('/:id').delete(deleteProcurement);
+router.route('/').get(getProcurements).post(createProcurement);
+router.route('/:id').get(getProcurement).patch(updateProcurement).delete(deleteProcurement);
 
 module.exports = router;
