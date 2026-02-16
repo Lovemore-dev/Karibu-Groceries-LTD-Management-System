@@ -13,7 +13,7 @@ const produceSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Produce type is required'],
       minlength: [2, 'Produce type must be at least 2 characters'],
-      match: [/^[A-Za-z]+$/, 'Produce type must contain alphabets only'],
+      match: [/^[A-Za-z ]+$/, 'Produce type must contain alphabets only'],
     },
     // Tonnage: numeric, not empty, not less than 3 characters (e.g., 100kg+)
     tonnage: {
@@ -44,11 +44,13 @@ const produceSchema = new mongoose.Schema(
     contact: {
       type: String,
       required: [true, 'Contact is required'],
+      match: [/^(\+256|256|0)7[0-9]{8}$/, 'Contact must be a valid phone number in Uganda'],
     },
     // Price to be sold at
     sellingPrice: {
       type: Number,
       required: [true, 'Selling price is required'],
+      min: [1, 'Selling price must be greater than 0'],
     },
     // Date and Time: Not empty
     // Using timestamps ensures these are automatically generated and not empty
