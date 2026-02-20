@@ -18,6 +18,13 @@ const creditSaleSchema = new mongoose.Schema(
       //   Matches the format of NIN in Uganda: starts with 'CF' or 'CM' followed by 12 alphanumeric characters
       match: [/^(CF|CM)[A-Z0-9]{12}$/, `Follow the format of NIN in Uganda`],
     },
+    // Location: alpha-numeric, min 2 characters
+    location: {
+      type: String,
+      required: [true, 'Location is required'],
+      match: [/^[a-zA-Z0-9 ]+$/, 'Location should be alpha-numeric'],
+      minLength: [2, 'Location must not be less than 2 characters'],
+    },
     // Contact: valid phone numbers
     contact: {
       type: String,
@@ -41,19 +48,18 @@ const creditSaleSchema = new mongoose.Schema(
     dueDate: {
       type: Date,
       required: [true, 'Due date is required'],
-      validate: {
-        validator(value) {
-          // Check if the due date is at least today or in the future
-          return value >= new Date().setHours(0, 0, 0, 0);
-        },
-        message: 'The due date cannot be in the past',
-      },
+    },
+    // Date of Dispatch
+    dispatchDate: {
+      type: Date,
+      required: [true, 'Dispatch date is required'],
     },
     // Produce name should be alpha-numeric and not less than 2 characters and not empty
     produceName: {
       type: String,
       required: [true, `Produce name is required`],
       match: [/^[a-zA-Z0-9 ]+$/, 'Produce name should be alpha-numeric'],
+      minLength: [2, 'Produce name must not be less than 2 characters'],
     },
     // Type: alphabets only, not less than 2 characters, not empty
     produceType: {

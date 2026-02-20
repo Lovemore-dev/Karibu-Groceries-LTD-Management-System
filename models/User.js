@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Username is required'],
       trim: true,
       lowercase: true,
+      match: [/^[a-zA-Z0-9]+$/, 'Username must be alpha-numeric'],
     },
     email: {
       type: String,
@@ -46,7 +47,7 @@ const userSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ['Active', 'Pending'],
-      default: 'Pending',
+      default: 'Active',
     },
   },
   { timestamps: true },

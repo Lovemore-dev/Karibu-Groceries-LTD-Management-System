@@ -29,6 +29,11 @@ const saleSchema = new mongoose.Schema(
       match: [/^[a-zA-Z0-9 ]+$/, `Sales agent's name should be alpha-numeric`],
       minLength: [2, `Sales agent's name must not be less than 2 characters`],
     },
+    // Explicit date and time fields
+    date: {
+      type: Date,
+      required: [true, `Date of sale is required`],
+    },
   },
   { timestamps: true },
 );
