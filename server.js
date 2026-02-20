@@ -2,6 +2,8 @@
 require('dotenv').config();
 // import express
 const express = require('express');
+// import cors for cross-origin requests
+const cors = require('cors');
 // import swagger tools
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -14,9 +16,13 @@ const app = express();
 
 connectDB();
 
+// Global Middleware
 // middleware to parse JSON bodies
 app.use(express.json());
-
+// middleware to enable CORS
+app.use(cors());
+// Helps with EJS form submissions
+app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 5000;
 // Router 1: Procurement (/api/procurements)
 app.use('/api/procurements', require('./routes/procurementRoute'));
@@ -28,6 +34,10 @@ app.use('/api/sales', require('./routes/saleRoute'));
 // Router 3: Users & Authentication (/api/user)
 app.use('/api/user', require('./routes/userRoute'));
 
+// 404 catch-all route (for api testing with postman or frontend)
+app.use((req, res) => {
+  res.status(404).json({ message: `Route ${req.originalUrl} not found on this server` });
+});
 // API Documentation using Swagger
 const swaggerDefinition = {
   openapi: '3.0.0',
