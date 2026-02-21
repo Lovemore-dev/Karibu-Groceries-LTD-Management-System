@@ -96,6 +96,7 @@ router.get('/', restrictTo('Director', 'Manager', 'Sales Agent'), async (req, re
     // RULE: Directors should only see totals or aggregations
     if (req.user.role === 'Director') {
       const cashAggregations = await Sale.aggregate([
+        { $match: { branch: { $exists: true, $ne: null } } },
         {
           $group: {
             _id: '$branch',
@@ -105,6 +106,7 @@ router.get('/', restrictTo('Director', 'Manager', 'Sales Agent'), async (req, re
         },
       ]);
       const creditAggregations = await CreditSale.aggregate([
+        { $match: { branch: { $exists: true, $ne: null } } },
         {
           $group: {
             _id: '$branch',
@@ -117,7 +119,8 @@ router.get('/', restrictTo('Director', 'Manager', 'Sales Agent'), async (req, re
     }
 
     // For managers and agents, show all sales from their branch
-    const query = { branch: req.user.branch };
+    const branch = req.user.branch.trim();
+    const query = { branch };
     const cashSales = await Sale.find(query).sort({ createdAt: -1 });
     const creditSales = await CreditSale.find(query).sort({ createdAt: -1 });
 
