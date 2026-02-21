@@ -52,6 +52,7 @@ const creditSaleSchema = new mongoose.Schema(
     // Date of Dispatch
     dispatchDate: {
       type: Date,
+      default: Date.now,
       required: [true, 'Dispatch date is required'],
     },
     // Produce name should be alpha-numeric and not less than 2 characters and not empty
@@ -72,6 +73,10 @@ const creditSaleSchema = new mongoose.Schema(
     tonnage: {
       type: Number,
       required: [true, `Tonnage is required`],
+    },
+    branch: {
+      type: String,
+      required: [true, 'A sale must belong to a branch'],
     },
   },
   { timestamps: true },

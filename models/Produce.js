@@ -15,17 +15,13 @@ const produceSchema = new mongoose.Schema(
       minlength: [2, 'Produce type must be at least 2 characters'],
       match: [/^[A-Za-z ]+$/, 'Produce type must contain alphabets only'],
     },
-    // Date of procurement: not empty, automatically generated when a new procurement is made
-    date: {
-      type: Date,
-      required: [true, 'Date of procurement is required'],
-    },
+
     // Tonnage: numeric, not empty, not less than 3 characters (e.g., 100kg+)
     // Business rule: Individual procurements must be at least 100kg to ensure efficient handling and storage. This also helps maintain a consistent supply for sales and reduces the frequency of small, inefficient procurements.
     tonnage: {
       type: Number,
       required: [true, 'Tonnage is required'],
-      min: [1000, 'Tonnage must be at least 1 tonne (1000kg)'],
+      min: [0, 'Tonnage must be at least 1 tonne (1000kg)'],
     },
     // Cost: numeric, not empty, not less than 5 characters (e.g., 10,000+)
     cost: {
@@ -59,6 +55,12 @@ const produceSchema = new mongoose.Schema(
       min: [10000, 'Selling price must be at least 10,000 UgX'],
     },
     // Date and Time: Not empty
+    // Date of procurement: not empty, automatically generated when a new procurement is made
+    date: {
+      type: Date,
+      default: Date.now,
+      required: [true, 'Date of procurement is required'],
+    },
     // Using timestamps ensures these are automatically generated and not empty
   },
   { timestamps: true },
