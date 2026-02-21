@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
 });
 
 // User Management */
-router.post('/register', protect, restrictTo('IT Admin'), async (req, res) => {
+router.post('/register', protect, restrictTo('Director'), async (req, res) => {
   try {
     const { fullName, username, email, password, role, branch } = req.body;
 
@@ -116,8 +116,8 @@ router.post('/register', protect, restrictTo('IT Admin'), async (req, res) => {
     return res.status(400).json({ error: 'Failed to register user', message: error.message });
   }
 });
-// Get all users (for IT Admin)
-router.get('/', protect, restrictTo('IT Admin', 'Director'), async (req, res) => {
+// Get all users (for Director)
+router.get('/', protect, restrictTo('Director'), async (req, res) => {
   try {
     const users = await User.find().select('-password'); // Don't send passwords back
     return res.status(200).json(users);
