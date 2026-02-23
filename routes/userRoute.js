@@ -10,21 +10,13 @@ const Sale = require('../models/Sale');
 const CreditSale = require('../models/CreditSale');
 const { protect, restrictTo } = require('../middleware/auth');
 
-// Public Routes
-/**
- * @swagger
- * tags:
- *   name: Users
- *   description: User manager and authentication
- */
-
 /**
  * @swagger
  * /api/user/login:
  *   post:
  *     summary: Authenticate user and get token
  *     tags: [Users]
- *     requestBody: true
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
