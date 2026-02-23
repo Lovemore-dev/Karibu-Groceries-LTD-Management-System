@@ -1,0 +1,90 @@
+<main class="backgroundView">
+  <div class="header-section mb-4" style="margin-left: 20px">
+    <h2 class="fw-bold">Business Performance Reports</h2>
+    <p class="text-muted">Summary of revenue, expenses, and credit exposure.</p>
+  </div>
+
+  <div class="formDesign w-100 px-3">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="p-3 bg-white border rounded shadow-sm">
+          <small class="text-muted text-uppercase fw-bold">Total Sales</small>
+          <h4 class="mb-0 text-success">UGX 15,400,000</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 bg-white border rounded shadow-sm">
+          <small class="text-muted text-uppercase fw-bold">Procurement Cost</small>
+          <h4 class="mb-0 text-secondary">UGX 9,200,000</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 bg-white border rounded shadow-sm border-start border-primary border-4">
+          <small class="text-muted text-uppercase fw-bold">Estimated Profit</small>
+          <h4 class="mb-0 text-primary">UGX 6,200,000</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 bg-white border rounded shadow-sm border-start border-warning border-4">
+          <small class="text-muted text-uppercase fw-bold">Outstanding Credit</small>
+          <h4 class="mb-0 text-warning">UGX 2,150,000</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold">Produce Performance (Current Month)</h6>
+        <button class="btn btn-sm btn-outline-dark">
+          <i class="bi bi-download me-2"></i>Export PDF
+        </button>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="bg-light">
+              <tr>
+                <th class="ps-4">Produce</th>
+                <th>Qty Sold (Kg)</th>
+                <th>Avg Selling Price</th>
+                <th>Total Revenue</th>
+                <th class="pe-4 text-end">Profit Margin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ps-4 fw-medium">Beans</td>
+                <td>2,400</td>
+                <td>UGX 3,500</td>
+                <td>UGX 8,400,000</td>
+                <td class="pe-4 text-end text-success">+15%</td>
+              </tr>
+              <tr>
+                <td class="ps-4 fw-medium">Grain Maize</td>
+                <td>1,800</td>
+                <td>UGX 2,200</td>
+                <td>UGX 3,960,000</td>
+                <td class="pe-4 text-end text-success">+12%</td>
+              </tr>
+              <tr>
+                <td class="ps-4 fw-medium">Soybeans</td>
+                <td>1,200</td>
+                <td>UGX 4,000</td>
+                <td>UGX 4,800,000</td>
+                <td class="pe-4 text-end text-success">+18%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  (function initReports() {
+    console.log('Financial reports module initialized.');
+    // Integration Tip: Use a library like Chart.js here later
+    // if the manager wants a simple bar graph of sales.
+  })();
+</script>
