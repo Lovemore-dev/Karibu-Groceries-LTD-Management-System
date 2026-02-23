@@ -34,10 +34,6 @@ app.use('/api/sales', require('./routes/saleRoute'));
 // Router 3: Users & Authentication (/api/user)
 app.use('/api/user', require('./routes/userRoute'));
 
-// 404 catch-all route (for api testing with postman or frontend)
-app.use((req, res) => {
-  res.status(404).json({ message: `Route ${req.originalUrl} not found on this server` });
-});
 // API Documentation using Swagger
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -47,6 +43,17 @@ const swaggerDefinition = {
     description: 'API documentation for Karibu Groceries LTD',
   },
   servers: [{ url: `http://localhost:${port}`, description: 'Development server' }],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
+  // Applying security
+  security: [{ bearerAuth: [] }],
 };
 
 // Options for swaager jsdocs
@@ -58,6 +65,11 @@ const options = {
 // create swagger specification
 const swaggerSpec = swaggerJsDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 404 catch-all route (for api testing with postman or frontend)
+app.use((req, res) => {
+  res.status(404).json({ message: `Route ${req.originalUrl} not found on this server` });
+});
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
