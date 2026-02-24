@@ -1,5 +1,6 @@
 // load environment variables from .env file
 require('dotenv').config();
+
 // import express
 const express = require('express');
 // import cors for cross-origin requests
@@ -9,6 +10,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 // import database connection
 const connectDB = require('./config/db');
+
+if (!process.env.JWT_SECRET) {
+  // eslint-disable-next-line no-console
+  console.error('FATAL ERROR: JWT_SECRET is not defined in .env file');
+  process.exit(1); // Stop the server immediately
+}
 
 // initialize express
 const app = express();
@@ -42,7 +49,9 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API documentation for Karibu Groceries LTD',
   },
-  servers: [{ url: `http://localhost:${port}`, description: 'Development server' }],
+  servers: [
+    { url: `process.env.BASE_URL || http://localhost:${port}`, description: 'Development server' },
+  ],
   components: {
     securitySchemes: {
       bearerAuth: {
@@ -71,6 +80,18 @@ app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found on this server` });
 });
 
+// Global Error Handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.error(err.stack);
+
+  const numericStatus = err.statusCode || 500;
+  res.status(numericStatus).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
+});
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`The server is running on port ${port}`);
