@@ -1,0 +1,163 @@
+<main class="backgroundView">
+  <div class="mainProcurementPage">
+    <div class="rightSide">
+      <h2 class="fw-bold mb-1" style="margin-left: 20px">Record New Produce Procurement</h2>
+      <p class="text-muted mb-4" style="margin-left: 20px">Fill in the details below to log a new produce purchase</p>
+
+      <div class="formDesign">
+        <form id="procurementForm">
+          <section class="mb-4">
+            <h5 class="border-bottom pb-2">Produce Details</h5>
+            <div class="Details d-flex flex-wrap gap-3">
+              <label for="produceName">
+                <p class="mb-1 small fw-bold">Produce Name</p>
+                <select id="produceName" name="produceName" class="form-select" required>
+                  <option value="">Select Produce</option>
+                  <option value="Beans">Beans</option>
+                  <option value="Grain Maize">Grain Maize</option>
+                  <option value="Cow Peas">Cow Peas</option>
+                  <option value="G-nuts">G-nuts</option>
+                  <option value="Soybeans">Soybeans</option>
+                </select>
+              </label>
+
+              <label for="produceType">
+                <p class="mb-1 small fw-bold">Produce Type</p>
+                <input
+                  id="produceType"
+                  name="produceType"
+                  type="text"
+                  class="form-control"
+                  pattern="[A-Za-z]{2,}"
+                  required
+                  placeholder="e.g., Grains"
+                />
+              </label>
+
+              <label for="tonnage">
+                <p class="mb-1 small fw-bold">Tonnage (kgs)</p>
+                <input
+                  id="tonnage"
+                  name="tonnage"
+                  type="number"
+                  class="form-control"
+                  min="1000"
+                  required
+                  placeholder="e.g., 1000"
+                />
+              </label>
+            </div>
+          </section>
+
+          <section class="mb-4">
+            <h5 class="border-bottom pb-2">Transaction Details</h5>
+            <div class="Details d-flex flex-wrap gap-3">
+              <label for="purchaseDate">
+                <p class="mb-1 small fw-bold">Date of Purchase</p>
+                <input id="purchaseDate" name="purchaseDate" type="date" class="form-control" required />
+              </label>
+
+              <label for="purchaseTime">
+                <p class="mb-1 small fw-bold">Time of Purchase</p>
+                <input id="purchaseTime" name="purchaseTime" type="time" class="form-control" required />
+              </label>
+
+              <label for="totalCost">
+                <p class="mb-1 small fw-bold">Total Cost (UgX)</p>
+                <input
+                  id="totalCost"
+                  name="totalCost"
+                  type="number"
+                  class="form-control"
+                  min="10000"
+                  required
+                  placeholder="e.g., 1500000"
+                />
+              </label>
+
+              <label for="sellingPrice">
+                <p class="mb-1 small fw-bold">Selling Price (per kg)</p>
+                <input
+                  id="sellingPrice"
+                  name="sellingPrice"
+                  type="number"
+                  class="form-control"
+                  min="1"
+                  required
+                  placeholder="e.g., 3500"
+                />
+              </label>
+            </div>
+          </section>
+
+          <section class="supplierDetails mb-4">
+            <h5 class="border-bottom pb-2">Supplier & Location Details</h5>
+            <div class="Details d-flex flex-wrap gap-3">
+              <label for="dealerName">
+                <p class="mb-1 small fw-bold">Dealer Name</p>
+                <input
+                  id="dealerName"
+                  name="dealerName"
+                  type="text"
+                  class="form-control"
+                  pattern="[A-Za-z0-9 ]{2,}"
+                  required
+                  placeholder="e.g., Bweyale Farmers"
+                />
+              </label>
+
+              <label for="dealerContact">
+                <p class="mb-1 small fw-bold">Dealer Contact</p>
+                <input
+                  id="dealerContact"
+                  name="dealerContact"
+                  type="tel"
+                  class="form-control"
+                  pattern="^0[0-9]{9}$"
+                  required
+                  placeholder="e.g., 0771234567"
+                />
+              </label>
+
+              <label for="branchName">
+                <p class="mb-1 small fw-bold">Branch Name</p>
+                <input
+                  id="branchName"
+                  name="branchName"
+                  type="text"
+                  class="form-control bg-light"
+                  value="Kiryandongo Branch"
+                  readonly
+                />
+              </label>
+            </div>
+          </section>
+
+          <div class="formActions d-flex gap-2 justify-content-end mt-4">
+            <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+            <button type="submit" class="btn btn-success px-4" style="background-color: green; border-color: green;">
+              Save Procurement
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Access Control Script
+  (function() {
+    const _user = localStorage.getItem('userDetails');
+    if (_user) {
+      const user = JSON.parse(_user);
+      if (user.role !== 'Manager') {
+        document.getElementById('mainContent').innerHTML = `
+          <div class="alert alert-warning m-4">
+            <h5>Access Restricted</h5>
+            <p>No sales agent is allowed to record produce entry. Please contact your manager.</p>
+          </div>`;
+      }
+    }
+  })();
+</script>
