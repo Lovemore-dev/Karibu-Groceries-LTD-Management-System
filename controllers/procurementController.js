@@ -26,7 +26,6 @@ exports.getAllProcurements = catchAsync(async (req, res) => {
 // @desc Create a procurement
 exports.createProcurement = catchAsync(async (req, res, next) => {
   if (req.body.tonnage < 1000) {
-    // UPDATED: Using kglError
     return next(new KGLError('Produce from individual dealers must be at least 1000kg', 400));
   }
 
@@ -62,7 +61,6 @@ exports.updateProcurement = catchAsync(async (req, res, next) => {
   });
 
   if (!updatedProcurement) {
-    // UPDATED: Using KGLError
     return next(new KGLError('No procurement found with that ID', 404));
   }
 
@@ -74,7 +72,6 @@ exports.deleteProcurement = catchAsync(async (req, res, next) => {
   const deletedProcurement = await produce.findByIdAndDelete(req.params.id);
 
   if (!deletedProcurement) {
-    // UPDATED: Using kglError
     return next(new KGLError('No procurement found with that ID', 404));
   }
 
