@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(cors());
 // Helps with EJS form submissions
 app.use(express.urlencoded({ extended: true }));
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 // Router 1: Procurement (/api/procurements)
 app.use('/api/procurements', require('./routes/procurementRoute'));
 
