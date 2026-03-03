@@ -1,0 +1,238 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* --- Header & Navigation --- */
+.headerSection {
+  width: 100%;
+}
+
+.navSection {
+  background-color: rgb(242, 253, 251);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navSection span {
+  font-weight: bolder;
+  font-size: 1.5rem;
+  margin-left: 5px;
+}
+
+.navBarLinks li {
+  list-style: none;
+}
+
+.navBarLinks a {
+  text-decoration: none;
+  color: black;
+}
+
+@media (max-width: 600px) {
+  .navSection {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* --- Hero Section --- */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 95vh;
+  width: 100%;
+  background-image: url('/images/hero-background.jpg');
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 50px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.heroContent {
+  max-width: 800px;
+}
+
+.heroSection h1 {
+  color: #fff;
+  margin: 0 0 10px 20px;
+  font-size: 2.5rem;
+}
+
+.heroSection p {
+  color: #fff;
+  margin: 0 0 20px 20px;
+  font-size: 1.2rem;
+}
+
+/* --- Buttons --- */
+.callButtons {
+  margin-left: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.button1, .button2 {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button1:hover, .button2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Main Content & Cards --- */
+.mainSection {
+  padding: 10px;
+}
+
+.mainSection p {
+  padding: 10px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.cardBox {
+  border: 1px groove #ccc;
+  border-radius: 8px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 15px 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cardBox i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.cardBox h3 {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* --- Footer --- */
+.footerSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(242, 253, 251);
+  padding: 15px 0;
+  width: 100%;
+}
+
+/* --- Login & Register Shared --- */
+.mainLogin, .mainRegister {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  width: 100%;
+  min-height: 100vh;
+}
+
+.welcomeSide, .welcomeSideLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 2rem;
+}
+
+.welcomeSide {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('/images/high-angle-beans-arrangement-concept.jpg');
+}
+
+.welcomeSideLogin {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('/images/different-kinds-bean-seeds-lentil-peas-dishes-black.jpg');
+}
+
+/* --- Form Elements --- */
+.loginSide, .createAccountSide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgb(2, 130, 87);
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* --- Dashboard Specific --- */
+.overview, .quickActions, .stockAndSales {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.overviewCards, .lowStockAlert, .recentSales {
+  border: 1px solid #eee;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  flex: 1;
+}
+
+/* --- Utilities --- */
+.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
