@@ -1,5 +1,6 @@
 <script setup>
 //  The script goes here
+
 </script>
 
 <template>
@@ -133,7 +134,6 @@
     align-items: center;
     gap: 15px;
     border-left: 4px solid #198754;
-    /* Karibu Green */
 }
 
 .border-danger-left {
@@ -147,7 +147,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.4rem;
+    font-size: 0.75rem;
 }
 
 /* Color variations */
@@ -172,14 +172,12 @@
 
 .stat-label {
     color: #6c757d;
-    font-size: 0.85rem;
-    text-transform: uppercase;
+    font-size: 0.75rem;
     letter-spacing: 0.5px;
 }
 
 .stat-value {
     margin: 0;
-    font-weight: 700;
     color: #2c3e50;
 }
 

@@ -210,7 +210,7 @@ onUnmounted(() => {
 /* 3. Ensure the icons don't have extra gap when text is gone */
 .admin-sidebar.collapsed .nav-item i {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
     /* Make icons slightly more prominent */
 }
 
