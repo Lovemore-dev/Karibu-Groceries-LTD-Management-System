@@ -13,10 +13,10 @@ exports.createCashSale = catchAsync(async (req, res, next) => {
   const batches = await Produce.find({
     produceName,
     branch,
-    tonnage: { $gt: 0 },
+    currentInventory: { $gt: 0 },
   }).sort({ createdAt: 1 });
 
-  const totalAvailable = batches.reduce((acc, batch) => acc + batch.tonnage, 0);
+  const totalAvailable = batches.reduce((acc, batch) => acc + batch.currentInventory, 0);
 
   if (totalAvailable < tonnage) {
     return next(new KGLError(`Insufficient inventory. Only ${totalAvailable}kg available.`, 400));
@@ -31,12 +31,12 @@ exports.createCashSale = catchAsync(async (req, res, next) => {
     const batch = batches[i];
     let deductedFromThisBatch = 0;
 
-    if (batch.tonnage >= remainingToDeduct) {
+    if (batch.currentInventory >= remainingToDeduct) {
       deductedFromThisBatch = remainingToDeduct;
       remainingToDeduct = 0;
     } else {
-      deductedFromThisBatch = batch.tonnage;
-      remainingToDeduct -= batch.tonnage;
+      deductedFromThisBatch = batch.currentInventory;
+      remainingToDeduct -= batch.currentInventory;
     }
 
     totalSaleValue += deductedFromThisBatch * batch.sellingPrice;
@@ -44,7 +44,7 @@ exports.createCashSale = catchAsync(async (req, res, next) => {
     bulkOps.push({
       updateOne: {
         filter: { _id: batch._id },
-        update: { $inc: { tonnage: -deductedFromThisBatch } },
+        update: { $inc: { currentInventory: -deductedFromThisBatch } },
       },
     });
   }
@@ -76,10 +76,10 @@ exports.createCreditSale = catchAsync(async (req, res, next) => {
   const batches = await Produce.find({
     produceName,
     branch,
-    tonnage: { $gt: 0 },
+    currentInventory: { $gt: 0 },
   }).sort({ createdAt: 1 });
 
-  const totalAvailable = batches.reduce((acc, batch) => acc + batch.tonnage, 0);
+  const totalAvailable = batches.reduce((acc, batch) => acc + batch.currentInventory, 0);
 
   if (totalAvailable < tonnage) {
     return next(new KGLError(`Insufficient inventory. Only ${totalAvailable}kg available.`, 400));
@@ -96,12 +96,12 @@ exports.createCreditSale = catchAsync(async (req, res, next) => {
     if (!produceType) produceType = batch.produceType;
 
     let deducted = 0;
-    if (batch.tonnage >= remainingToDeduct) {
+    if (batch.currentInventory >= remainingToDeduct) {
       deducted = remainingToDeduct;
       remainingToDeduct = 0;
     } else {
-      deducted = batch.tonnage;
-      remainingToDeduct -= batch.tonnage;
+      deducted = batch.currentInventory;
+      remainingToDeduct -= batch.currentInventory;
     }
 
     totalAmountDue += deducted * batch.sellingPrice;
@@ -109,7 +109,7 @@ exports.createCreditSale = catchAsync(async (req, res, next) => {
     bulkOps.push({
       updateOne: {
         filter: { _id: batch._id },
-        update: { $inc: { tonnage: -deducted } },
+        update: { $inc: { currentInventory: -deducted } },
       },
     });
   }

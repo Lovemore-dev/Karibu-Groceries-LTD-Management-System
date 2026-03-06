@@ -4,23 +4,39 @@ const KGLError = require('../utils/kglError');
 
 // @desc Get all procurements
 exports.getAllProcurements = catchAsync(async (req, res) => {
-  if (req.user.role === 'Director') {
-    const aggregations = await produce.aggregate([
-      {
-        $group: {
-          _id: '$branch',
-          totalTonnage: { $sum: '$tonnage' },
-          totalStockValue: { $sum: { $multiply: ['$tonnage', '$cost'] } },
-        },
-      },
-    ]);
-    return res.status(200).json({ status: 'success', data: aggregations });
+  const query = {};
+
+  // 1. Filter by branch if not Director
+  if (req.user.role !== 'Director') {
+    query.branch = req.user.branch;
   }
 
-  const procurements = await produce.find({ branch: req.user.branch }).sort({ createdAt: -1 });
-  return res
-    .status(200)
-    .json({ status: 'success', results: procurements.length, data: procurements });
+  // 2. Always get the actual list for the table
+  const procurements = await produce.find(query).sort({ createdAt: -1 });
+
+  // 3. If Director, also calculate stats
+  let stats = null;
+  // if (req.user.role === 'Director') {
+  stats = await produce.aggregate([
+    { $match: query },
+    {
+      $group: {
+        _id: '$branch',
+        totalTonnageBought: { $sum: '$tonnage' },
+        currentTonnageInStore: { $sum: '$currentInventory' },
+        totalInvestment: { $sum: { $multiply: ['$tonnage', '$cost'] } },
+        currentAssetValue: { $sum: { $multiply: ['$currentInventory', '$cost'] } },
+      },
+    },
+  ]);
+  // }
+
+  return res.status(200).json({
+    status: 'success',
+    results: procurements.length,
+    data: procurements,
+    stats,
+  });
 });
 
 // @desc Create a procurement
@@ -31,6 +47,7 @@ exports.createProcurement = catchAsync(async (req, res, next) => {
 
   const newProcurement = await produce.create({
     ...req.body,
+    currentInventory: req.body.tonnage,
     branch: req.user.branch,
     procuredBy: req.user.fullName,
   });
@@ -55,10 +72,18 @@ exports.getProcurement = catchAsync(async (req, res, next) => {
 
 // @desc Update procurement
 exports.updateProcurement = catchAsync(async (req, res, next) => {
-  const updatedProcurement = await produce.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const { tonnage } = req.body;
+  const updatedProcurement = await produce.findByIdAndUpdate(
+    req.params.id,
+    {
+      ...req.body,
+      ...(tonnage && { currentInventory: tonnage }),
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
 
   if (!updatedProcurement) {
     return next(new KGLError('No procurement found with that ID', 404));

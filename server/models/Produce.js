@@ -21,7 +21,13 @@ const produceSchema = new mongoose.Schema(
     tonnage: {
       type: Number,
       required: [true, 'Tonnage is required'],
-      min: [0, 'Tonnage must be at least 1 tonne (1000kg)'],
+      min: [100, 'Tonnage must be at least 1 tonne (100kg)'],
+    },
+    currentInventory: {
+      type: Number,
+      default: () => {
+        return this.tonnage;
+      },
     },
     // Cost: numeric, not empty, not less than 5 characters (e.g., 10,000+)
     cost: {
