@@ -9,6 +9,7 @@ const submitting = ref(false);
 const showModal = ref(false);
 const isEditing = ref(false);
 const currentId = ref(null);
+const stats = ref(null);
 
 // --- Toast System ---
 const toast = reactive({ show: false, message: '', type: 'success' });
@@ -90,12 +91,20 @@ const handleSave = async () => {
 
     try {
         submitting.value = true;
+
+        //ensure numeric values are actually numbers
+        const payload = {
+            ...formData,
+            tonnage: Number(formData.tonnage),
+            cost: Number(formData.cost),
+            sellingPrice: Number(formData.sellingPrice)
+        }
         let response;
 
         if (isEditing.value) {
-            response = await api.patch(`/procurements/${currentId.value}`, formData);
+            response = await api.patch(`/procurements/${currentId.value}`, payload);
         } else {
-            response = await api.post('/procurements', formData);
+            response = await api.post('/procurements', payload);
         }
 
         if (response.data.status === 'success') {
@@ -134,7 +143,7 @@ const handleDelete = async (id) => {
                 triggerToast("Record deleted successfully", "success");
             }
         } catch (err) {
-            triggerToast("Failed to delete record", "danger",err);
+            triggerToast("Failed to delete record", "danger", err);
         }
     }
 };
@@ -149,9 +158,14 @@ const fetchProcurements = async () => {
     try {
         loading.value = true;
         const response = await api.get('/procurements');
+        // load table
         procurements.value = response.data.data;
+
+        // For director's aggregated data
+        stats.value = response.data.stats || null;
     } catch (err) {
-        triggerToast(err, "Failed to fetch records", "danger");
+        const errMessage = err.response?.data?.message || "Failed to fetch records";
+        triggerToast(errMessage, "danger");
     } finally {
         loading.value = false;
     }
@@ -173,7 +187,7 @@ onMounted(fetchProcurements);
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-dark">Procurement Dashboard</h2>
-            <button class="btn btn-primary rounded-pill px-4" @click="openAddModal">
+            <button v-if="!stats" class="btn btn-primary rounded-pill px-4" @click="openAddModal">
                 <i class="fa-solid fa-plus me-2"></i>Record New Procurement
             </button>
         </div>
@@ -253,7 +267,31 @@ onMounted(fetchProcurements);
             <div class="spinner-border text-primary"></div>
         </div>
 
-        <div v-else class="card border-0 shadow-sm overflow-hidden">
+        <div v-if="stats && stats.length > 0" class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 pt-4">
+                <h5 class="fw-bold text-dark">Procurement Summary</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="text-muted small text-uppercase">
+                        <tr>
+                            <th class="ps-4">Branch</th>
+                            <th>Total Investment</th>
+                            <th>Tonnage Bought</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in stats" :key="item._id">
+                            <td class="ps-4 fw-bold">{{ item._id }}</td>
+                            <td class="fw-bold text-success">{{ item.totalInvestment.toLocaleString() }} UGX</td>
+                            <td>{{ item.totalTonnageBought.toLocaleString() }} kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div v-if="!stats" class="card border-0 shadow-sm overflow-hidden">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">

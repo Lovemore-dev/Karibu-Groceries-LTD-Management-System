@@ -30,18 +30,14 @@
                 <div class="nav-section-label" v-if="!isCollapsed">Transactions</div>
                 <router-link to="/admin/sales" class="nav-item">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
-                    <span>Cash Sales</span>
-                </router-link>
-                <router-link to="/admin/credit" class="nav-item">
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-                    <span>Credit Sales</span>
+                    <span>Sales</span>
                 </router-link>
 
                 <template v-if="userRole === 'director'">
                     <div class="nav-section-label" v-if="!isCollapsed">Intelligence</div>
-                    <router-link to="/admin/reports" class="nav-item">
+                    <router-link to="/admin/intelligence" class="nav-item">
                         <i class="fa-solid fa-chart-line"></i>
-                        <span>Aggregations</span>
+                        <span>BI Dashboard</span>
                     </router-link>
                 </template>
             </nav>
@@ -103,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted,provide } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -113,6 +109,9 @@ const isCollapsed = ref(false)
 const username = ref('User')
 const userRole = ref('')
 const userBranch = ref('')
+
+provide('userRole', userRole)
+provide('userBranch',userBranch)
 
 // responsiveness
 const handleResize = () => {
@@ -565,5 +564,18 @@ onUnmounted(() => {
         backdrop-filter: blur(4px);
         z-index: 90;
     }
+}
+
+/*Intelligence Dashboard design */
+:deep(.stats-card) {
+    transition: transform 0.2s ease;
+}
+
+:deep(.stats-card:hover) {
+    transform: translateY(-5px);
+}
+
+:deep(.progress-bar-glow) {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 </style>

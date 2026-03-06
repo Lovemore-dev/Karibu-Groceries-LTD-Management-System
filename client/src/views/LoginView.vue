@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
+const authStore = useAuthStore();
 const router = useRouter()
 
 // --- 1. Reactive State ---
@@ -46,7 +48,7 @@ const handleLogin = async () => {
             triggerToast("Login successful!", "success")
             localStorage.setItem("token", result.token)
             localStorage.setItem("userDetails", JSON.stringify(result.user))
-
+            authStore.setUser(result.user);
             setTimeout(() => {
                 router.push('/admin/dashboard')
             }, 1000)
