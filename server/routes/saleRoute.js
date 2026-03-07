@@ -67,6 +67,9 @@ router.post('/cash', restrictTo('Manager', 'Sales Agent'), saleController.create
 // Credit sale route
 router.post('/credit', restrictTo('Manager', 'Sales Agent'), saleController.createCreditSale);
 
+// Stock validation helper (used by frontend forms)
+router.get('/stock', restrictTo('Director', 'Manager', 'Sales Agent'), saleController.getAvailableStock);
+
 /**
  * @swagger
  * /api/sales:
