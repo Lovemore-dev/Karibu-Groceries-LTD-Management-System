@@ -49,6 +49,11 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 
 // @desc Register a new user (Director only)
 exports.registerUser = catchAsync(async (req, res, next) => {
+  // Business rule: only Directors can register users
+  if (!req.user || req.user.role !== 'Director') {
+    return next(new KGLError('Only Directors can register users', 403));
+  }
+
   const { fullName, username, email, password, role, branch } = req.body;
 
   const userExists = await User.findOne({ $or: [{ email }, { username }] });

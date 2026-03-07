@@ -11,25 +11,26 @@ exports.getAllProcurements = catchAsync(async (req, res) => {
     query.branch = req.user.branch;
   }
 
-  // 2. Always get the actual list for the table
-  const procurements = await produce.find(query).sort({ createdAt: -1 });
+  // 2. Always get the actual list for the table (organized by produce name, then newest first)
+  const procurements = await produce.find(query).sort({ produceName: 1, createdAt: -1 });
 
-  // 3. If Director, also calculate stats
-  let stats = null;
-  // if (req.user.role === 'Director') {
-  stats = await produce.aggregate([
+  // 3. Always compute stats (by branch): Director sees all branches, Manager sees their branch
+  const stats = await produce.aggregate([
     { $match: query },
     {
       $group: {
         _id: '$branch',
         totalTonnageBought: { $sum: '$tonnage' },
         currentTonnageInStore: { $sum: '$currentInventory' },
-        totalInvestment: { $sum: { $multiply: ['$tonnage', '$cost'] } },
-        currentAssetValue: { $sum: { $multiply: ['$currentInventory', '$cost'] } },
+        totalInvestment: { $sum: '$cost' },
+        currentAssetValue: {
+          $sum: {
+            $multiply: [{ $divide: ['$currentInventory', '$tonnage'] }, '$cost'],
+          },
+        },
       },
     },
   ]);
-  // }
 
   return res.status(200).json({
     status: 'success',
@@ -41,6 +42,11 @@ exports.getAllProcurements = catchAsync(async (req, res) => {
 
 // @desc Create a procurement
 exports.createProcurement = catchAsync(async (req, res, next) => {
+  // Business rule: only Managers can record procurements
+  if (!req.user || req.user.role !== 'Manager') {
+    return next(new KGLError('Only Managers can create procurements', 403));
+  }
+
   if (req.body.tonnage < 1000) {
     return next(new KGLError('Produce from individual dealers must be at least 1000kg', 400));
   }
@@ -63,7 +69,8 @@ exports.getProcurement = catchAsync(async (req, res, next) => {
     return next(new KGLError('No procurement found with that ID', 404));
   }
 
-  if (procurement.branch !== req.user.branch) {
+  // Directors can see all branches; others limited to their branch
+  if (req.user.role !== 'Director' && procurement.branch !== req.user.branch) {
     return next(new KGLError('Access denied. This is not your branch.', 403));
   }
 
@@ -72,33 +79,53 @@ exports.getProcurement = catchAsync(async (req, res, next) => {
 
 // @desc Update procurement
 exports.updateProcurement = catchAsync(async (req, res, next) => {
-  const { tonnage } = req.body;
+  // Only Managers may update procurements, and only within their branch
+  if (!req.user || req.user.role !== 'Manager') {
+    return next(new KGLError('Only Managers can update procurements', 403));
+  }
+
+  const existing = await produce.findById(req.params.id);
+
+  if (!existing) {
+    return next(new KGLError('No procurement found with that ID', 404));
+  }
+
+  if (existing.branch !== req.user.branch) {
+    return next(new KGLError('Access denied. This is not your branch.', 403));
+  }
+
+  // Never overwrite currentInventory from tonnage on update—sales reduce currentInventory only
+  const { tonnage, currentInventory, ...rest } = req.body;
   const updatedProcurement = await produce.findByIdAndUpdate(
     req.params.id,
-    {
-      ...req.body,
-      ...(tonnage && { currentInventory: tonnage }),
-    },
+    { ...rest, tonnage },
     {
       new: true,
       runValidators: true,
     },
   );
 
-  if (!updatedProcurement) {
-    return next(new KGLError('No procurement found with that ID', 404));
-  }
-
   return res.status(200).json({ status: 'success', data: updatedProcurement });
 });
 
 // @desc Delete procurement
 exports.deleteProcurement = catchAsync(async (req, res, next) => {
-  const deletedProcurement = await produce.findByIdAndDelete(req.params.id);
+  // Only Managers may delete procurements, and only within their branch
+  if (!req.user || req.user.role !== 'Manager') {
+    return next(new KGLError('Only Managers can delete procurements', 403));
+  }
 
-  if (!deletedProcurement) {
+  const existing = await produce.findById(req.params.id);
+
+  if (!existing) {
     return next(new KGLError('No procurement found with that ID', 404));
   }
+
+  if (existing.branch !== req.user.branch) {
+    return next(new KGLError('Access denied. This is not your branch.', 403));
+  }
+
+  const deletedProcurement = await produce.findByIdAndDelete(req.params.id);
 
   return res.status(200).json({ status: 'success', message: 'Deleted successfully' });
 });

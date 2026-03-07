@@ -6,8 +6,16 @@ const KGLError = require('../utils/kglError');
 
 // @desc Process a new cash sale
 exports.createCashSale = catchAsync(async (req, res, next) => {
+  if (!req.user || !['Manager', 'Sales Agent'].includes(req.user.role)) {
+    return next(new KGLError('Only Managers and Sales Agents can create cash sales', 403));
+  }
+
   const { produceName, tonnage } = req.body;
   const { branch } = req.user;
+
+  if (!tonnage || tonnage <= 0) {
+    return next(new KGLError('Tonnage must be a positive number', 400));
+  }
 
   // FIFO: Sort by createdAt 1 (oldest first)
   const batches = await Produce.find({
@@ -64,8 +72,16 @@ exports.createCashSale = catchAsync(async (req, res, next) => {
 
 // @desc Process a new credit sale (FIXED with FIFO logic)
 exports.createCreditSale = catchAsync(async (req, res, next) => {
+  if (!req.user || !['Manager', 'Sales Agent'].includes(req.user.role)) {
+    return next(new KGLError('Only Managers and Sales Agents can create credit sales', 403));
+  }
+
   const { nationalId, produceName, tonnage, buyersName, dueDate, contact, location } = req.body;
   const { branch } = req.user;
+
+  if (!tonnage || tonnage <= 0) {
+    return next(new KGLError('Tonnage must be a positive number', 400));
+  }
 
   const ninRegex = /^(CF|CM)[A-Z0-9]{12}$/;
   if (!nationalId || !ninRegex.test(nationalId)) {
@@ -129,7 +145,7 @@ exports.createCreditSale = catchAsync(async (req, res, next) => {
     amountDue: totalAmountDue,
     saleAgent: req.user.fullName,
     branch,
-    dateOfDispatch: new Date(),
+    dispatchDate: new Date(),
   });
 
   return res.status(201).json({ status: 'success', data: newCreditSale });
@@ -166,4 +182,68 @@ exports.getAllSales = catchAsync(async (req, res) => {
   const creditSales = await CreditSale.find(query).sort({ createdAt: -1 });
 
   return res.status(200).json({ status: 'success', cashSales, creditSales });
+});
+
+// @desc Get available stock (for sales validation)
+// - Staff (Manager / Sales Agent): scoped to their branch
+// - Director: can request per-branch via ?branch=Maganjo|Matugga, otherwise returns all-branch breakdown
+exports.getAvailableStock = catchAsync(async (req, res) => {
+  const produceName = req.query.produceName?.trim();
+  const branchQuery = req.query.branch?.trim();
+
+  const match = { currentInventory: { $gt: 0 } };
+
+  if (req.user.role === 'Director') {
+    if (branchQuery) match.branch = branchQuery;
+  } else {
+    match.branch = req.user.branch;
+  }
+
+  if (produceName) match.produceName = produceName;
+
+  // If Director and no branch specified, return breakdown by branch + produceName
+  if (req.user.role === 'Director' && !branchQuery && !produceName) {
+    const data = await Produce.aggregate([
+      { $match: match },
+      {
+        $group: {
+          _id: { branch: '$branch', produceName: '$produceName' },
+          totalAvailable: { $sum: '$currentInventory' },
+        },
+      },
+      { $sort: { '_id.branch': 1, '_id.produceName': 1 } },
+    ]);
+
+    return res.status(200).json({ status: 'success', data });
+  }
+
+  // Branch-scoped (or produce-scoped) totals
+  const grouped = await Produce.aggregate([
+    { $match: match },
+    { $group: { _id: '$produceName', totalAvailable: { $sum: '$currentInventory' } } },
+    { $sort: { _id: 1 } },
+  ]);
+
+  if (produceName) {
+    const row = grouped.find((r) => r._id === produceName);
+    const totalAvailable = row ? row.totalAvailable : 0;
+    // Get selling price from first available batch for amount preview on frontend
+    const firstBatch = await Produce.findOne(match).select('sellingPrice').lean();
+    const sellingPricePerKg = firstBatch?.sellingPrice ? firstBatch.sellingPrice : null;
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        branch: match.branch || null,
+        produceName,
+        totalAvailable,
+        sellingPricePerKg,
+      },
+    });
+  }
+
+  return res.status(200).json({
+    status: 'success',
+    data: grouped.map((r) => ({ produceName: r._id, totalAvailable: r.totalAvailable })),
+    branch: match.branch || null,
+  });
 });
