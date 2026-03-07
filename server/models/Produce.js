@@ -7,6 +7,7 @@ const produceSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Produce name is required'],
       match: [/^[a-zA-Z0-9 ]+$/, 'Produce name must be alpha-numeric'],
+      enum: ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'],
     },
     // Type: alphabets only, not less than 2 characters, not empty
     produceType: {
@@ -14,18 +15,19 @@ const produceSchema = new mongoose.Schema(
       required: [true, 'Produce type is required'],
       minlength: [2, 'Produce type must be at least 2 characters'],
       match: [/^[A-Za-z ]+$/, 'Produce type must contain alphabets only'],
+      enum: ['Legume', 'Cereal'],
     },
 
-    // Tonnage: numeric, not empty, not less than 3 characters (e.g., 100kg+)
-    // Business rule: Individual procurements must be at least 100kg to ensure efficient handling and storage. This also helps maintain a consistent supply for sales and reduces the frequency of small, inefficient procurements.
+    // Tonnage: numeric, not empty, not less than 3 characters (e.g., 1000kg+)
+    // Business rule: Individual procurements must be at least 1000kg (1 tonne) to ensure efficient handling and storage.
     tonnage: {
       type: Number,
       required: [true, 'Tonnage is required'],
-      min: [100, 'Tonnage must be at least 1 tonne (100kg)'],
+      min: [1000, 'Tonnage must be at least 1000kg'],
     },
     currentInventory: {
       type: Number,
-      default: () => {
+      default() {
         return this.tonnage;
       },
     },
@@ -58,7 +60,6 @@ const produceSchema = new mongoose.Schema(
     sellingPrice: {
       type: Number,
       required: [true, 'Selling price is required'],
-      min: [10000, 'Selling price must be at least 10,000 UgX'],
     },
     // Date and Time: Not empty
     // Date of procurement: not empty, automatically generated when a new procurement is made
@@ -71,5 +72,17 @@ const produceSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+produceSchema.pre('save', function () {
+  // Safety net: ensure selling price is not below unit cost
+  if (typeof this.cost === 'number' && typeof this.tonnage === 'number' && this.tonnage > 0) {
+    const unitCost = this.cost / this.tonnage;
+    if (this.sellingPrice < unitCost) {
+      throw new Error(
+        `Price Alert: sellingPrice (${this.sellingPrice}) below unitCost (${unitCost.toFixed(2)}).`,
+      );
+    }
+  }
+});
 
 module.exports = mongoose.model('Produce', produceSchema);

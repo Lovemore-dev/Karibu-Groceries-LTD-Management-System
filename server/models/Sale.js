@@ -7,6 +7,7 @@ const saleSchema = new mongoose.Schema(
       type: String,
       required: [true, `Produce name is required`],
       match: [/^[a-zA-Z0-9 ]+$/, 'Produce name should be alpha-numeric'],
+      enum: ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'],
     },
     tonnage: {
       type: Number,
