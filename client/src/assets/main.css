@@ -236,3 +236,12 @@ select {
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
+
+/* KGL ledger: compact typography (namespaced to avoid overwriting Bootstrap) */
+.kgl-ledger .text-xs {
+  font-size: 0.75rem;
+}
+
+.kgl-ledger .text-sm {
+  font-size: 0.875rem;
+}
