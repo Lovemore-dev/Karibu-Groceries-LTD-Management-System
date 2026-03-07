@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue';
 import api from '@/services/api';
+import { useAuthStore } from '@/stores/auth';
 
 // --- State ---
 const procurements = ref([]);
@@ -10,6 +11,15 @@ const showModal = ref(false);
 const isEditing = ref(false);
 const currentId = ref(null);
 const stats = ref(null);
+
+const authStore = useAuthStore();
+const isManager = computed(() => authStore.user?.role === 'Manager');
+const isDirector = computed(() => authStore.user?.role === 'Director');
+const userBranch = computed(() => authStore.user?.branch || '');
+
+// Match Produce.js model enums for dropdowns
+const PRODUCE_NAMES = ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'];
+const PRODUCE_TYPES = ['Legume', 'Cereal'];
 
 // --- Toast System ---
 const toast = reactive({ show: false, message: '', type: 'success' });
@@ -38,23 +48,30 @@ const errors = computed(() => {
         e.produceName = "Produce name must be alpha-numeric";
     if (formData.produceType && (!/^[a-zA-Z ]+$/.test(formData.produceType) || formData.produceType.length < 2))
         e.produceType = "Type must be alphabets only (min 2 chars)";
-    if (formData.tonnage !== null && String(formData.tonnage).length < 3)
-        e.tonnage = "Tonnage must be at least 3 digits (100kg+)";
-    if (formData.cost !== null && String(formData.cost).length < 5)
-        e.cost = "Cost must be at least 5 digits (10,000+)";
+    if (formData.tonnage !== null && Number(formData.tonnage) < 1000)
+        e.tonnage = "Tonnage must be at least 1000kg";
+    if (formData.cost !== null && Number(formData.cost) < 10000)
+        e.cost = "Cost must be at least 10,000 UGX";
     if (formData.dealerName && (!/^[a-zA-Z0-9 ]+$/.test(formData.dealerName) || formData.dealerName.length < 2))
         e.dealerName = "Dealer name must be alpha-numeric (min 2 chars)";
     if (formData.contact && !/^(\+256|256|0)7[0-9]{8}$/.test(formData.contact))
         e.contact = "Enter a valid Ugandan phone number (07...)";
-    if (formData.sellingPrice !== null && String(formData.sellingPrice).length < 5)
-        e.sellingPrice = "Selling price must be at least 5 digits";
+    if (
+        formData.sellingPrice !== null &&
+        formData.cost !== null &&
+        formData.tonnage !== null &&
+        Number(formData.tonnage) > 0 &&
+        Number(formData.sellingPrice) < Number(formData.cost) / Number(formData.tonnage)
+    ) {
+        e.sellingPrice = "Selling price cannot be below unit cost";
+    }
     return e;
 });
 
 const isFormValid = computed(() => {
     return Object.keys(errors.value).length === 0 &&
         formData.produceName && formData.produceType &&
-        formData.tonnage && formData.cost &&
+        formData.tonnage && formData.cost && formData.sellingPrice &&
         formData.dealerName && formData.contact;
 });
 
@@ -84,6 +101,10 @@ const openEditModal = (item) => {
 };
 
 const handleSave = async () => {
+    if (!isManager.value) {
+        triggerToast("Only Managers can record procurements", "danger");
+        return;
+    }
     if (!isFormValid.value) {
         triggerToast("Please fix the errors in the form before submitting", "danger");
         return;
@@ -175,162 +196,165 @@ onMounted(fetchProcurements);
 </script>
 
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid kgl-ledger p-2">
 
         <Transition name="toast">
-            <div v-if="toast.show" :class="['custom-toast shadow', `bg-${toast.type}`]">
-                <i :class="toast.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'"
-                    class="fa-solid me-2"></i>
+            <div v-if="toast.show" :class="['kgl-toast shadow', `bg-${toast.type}`]">
+                <i :class="[toast.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle', 'fa-solid me-1 kgl-icon-sm']"></i>
                 {{ toast.message }}
             </div>
         </Transition>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-dark">Procurement Dashboard</h2>
-            <button v-if="!stats" class="btn btn-primary rounded-pill px-4" @click="openAddModal">
-                <i class="fa-solid fa-plus me-2"></i>Record New Procurement
+            <h2 class="fw-bold text-dark mb-0">{{ isDirector ? 'Procurement Summary' : 'Procurement Dashboard' }}</h2>
+            <button v-if="isManager" class="btn btn-sm btn-primary rounded-pill px-3 kgl-action-btn" @click="openAddModal">
+                <i class="fa-solid fa-plus me-1 kgl-icon-sm"></i>Record New Procurement
             </button>
         </div>
 
-        <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
-            <div class="modal-content-custom card shadow-lg border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-0">
-                    <h5 class="mb-0 fw-bold">{{ isEditing ? 'Edit Procurement' : 'Procurement Form' }}</h5>
-                    <button class="btn-close" @click="showModal = false"></button>
+        <div v-if="showModal" class="kgl-modal-overlay" @click.self="showModal = false">
+            <div class="kgl-modal-content card shadow border-0 p-2">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-2 border-0">
+                    <h5 class="mb-0 fw-bold text-sm">{{ isEditing ? 'Edit Procurement' : 'Procurement Form' }}</h5>
+                    <button class="btn-close btn-sm" @click="showModal = false"></button>
                 </div>
 
-                <div class="modal-body-scroll no-scrollbar p-4 pt-0">
+                <div class="kgl-modal-body p-2 pt-0">
                     <form @submit.prevent="handleSave" class="row g-3">
+                        <div class="col-12" v-if="userBranch">
+                            <label class="form-label small fw-bold">Branch</label>
+                            <input :value="userBranch" type="text" class="form-control form-control-sm bg-light" disabled>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Produce Name</label>
-                            <input v-model="formData.produceName" type="text" class="form-control bg-light"
+                            <select v-model="formData.produceName" class="form-select form-select-sm bg-light"
                                 :class="{ 'is-invalid': errors.produceName }">
+                                <option value="" disabled>Select produce</option>
+                                <option v-for="name in PRODUCE_NAMES" :key="name" :value="name">{{ name }}</option>
+                            </select>
                             <div class="invalid-feedback">{{ errors.produceName }}</div>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Produce Type</label>
-                            <input v-model="formData.produceType" type="text" class="form-control bg-light"
+                            <select v-model="formData.produceType" class="form-select form-select-sm bg-light"
                                 :class="{ 'is-invalid': errors.produceType }">
+                                <option value="" disabled>Select type</option>
+                                <option v-for="type in PRODUCE_TYPES" :key="type" :value="type">{{ type }}</option>
+                            </select>
                             <div class="invalid-feedback">{{ errors.produceType }}</div>
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Tonnes</label>
-                            <input v-model.number="formData.tonnage" type="number" class="form-control bg-light"
+                            <input v-model.number="formData.tonnage" type="number" class="form-control form-control-sm bg-light"
                                 :class="{ 'is-invalid': errors.tonnage }">
                             <div class="invalid-feedback">{{ errors.tonnage }}</div>
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Cost</label>
-                            <input v-model.number="formData.cost" type="number" class="form-control bg-light"
+                            <input v-model.number="formData.cost" type="number" class="form-control form-control-sm bg-light"
                                 :class="{ 'is-invalid': errors.cost }">
                             <div class="invalid-feedback">{{ errors.cost }}</div>
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Selling Price</label>
-                            <input v-model.number="formData.sellingPrice" type="number" class="form-control bg-light"
+                            <input v-model.number="formData.sellingPrice" type="number" class="form-control form-control-sm bg-light"
                                 :class="{ 'is-invalid': errors.sellingPrice }">
                             <div class="invalid-feedback">{{ errors.sellingPrice }}</div>
                         </div>
-
-                        <div class="col-md-12">
+                        <div class="col-12">
                             <label class="form-label small fw-bold">Dealer Name</label>
-                            <input v-model="formData.dealerName" type="text" class="form-control bg-light"
+                            <input v-model="formData.dealerName" type="text" class="form-control form-control-sm bg-light"
                                 :class="{ 'is-invalid': errors.dealerName }">
                             <div class="invalid-feedback">{{ errors.dealerName }}</div>
                         </div>
-
-                        <div class="col-md-12">
+                        <div class="col-12">
                             <label class="form-label small fw-bold">Contact</label>
-                            <input v-model="formData.contact" type="text" class="form-control bg-light"
+                            <input v-model="formData.contact" type="text" class="form-control form-control-sm bg-light"
                                 :class="{ 'is-invalid': errors.contact }">
                             <div class="invalid-feedback">{{ errors.contact }}</div>
                         </div>
                     </form>
                 </div>
 
-                <div class="card-footer bg-white text-end py-3 border-0">
-                    <button class="btn btn-link text-muted me-3 text-decoration-none"
-                        @click="showModal = false">Cancel</button>
-                    <button @click="handleSave" class="btn btn-success px-4 rounded-pill shadow-sm"
+                <div class="card-footer bg-white text-end py-2 border-0">
+                    <button class="btn btn-sm btn-link text-muted me-2 text-decoration-none kgl-action-btn" @click="showModal = false">Cancel</button>
+                    <button @click="handleSave" class="btn btn-sm btn-success px-3 rounded-pill kgl-action-btn"
                         :disabled="submitting || !isFormValid">
-                        {{ submitting ? 'Processing...' : (isEditing ? 'Update Changes' : 'Confirm Purchase') }}
+                        {{ submitting ? 'Processing...' : (isEditing ? 'Update' : 'Confirm') }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <div v-if="loading" class="text-center my-5 py-5">
-            <div class="spinner-border text-primary"></div>
+        <div v-if="loading" class="text-center my-2 py-3">
+            <div class="spinner-border spinner-border-sm text-primary"></div>
         </div>
 
-        <div v-if="stats && stats.length > 0" class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white border-0 pt-4">
-                <h5 class="fw-bold text-dark">Procurement Summary</h5>
+        <!-- Director: total procurement per branch only -->
+        <div v-if="isDirector && stats && stats.length > 0" class="card border-0 shadow-sm p-2 mb-4">
+            <div class="card-header bg-white border-0 py-2">
+                <h5 class="fw-bold text-dark mb-0 small text-uppercase">Total Procurement per Branch</h5>
             </div>
             <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                    <thead class="text-muted small text-uppercase">
+                <table class="table table-sm table-hover align-middle mb-0 kgl-compact-table">
+                    <thead class="text-muted text-uppercase">
                         <tr>
-                            <th class="ps-4">Branch</th>
-                            <th>Total Investment</th>
-                            <th>Tonnage Bought</th>
+                            <th class="px-3">Branch</th>
+                            <th class="px-3">Total Investment</th>
+                            <th class="px-3">Tonnage Bought</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in stats" :key="item._id">
-                            <td class="ps-4 fw-bold">{{ item._id }}</td>
-                            <td class="fw-bold text-success">{{ item.totalInvestment.toLocaleString() }} UGX</td>
-                            <td>{{ item.totalTonnageBought.toLocaleString() }} kg</td>
+                            <td class="px-3 fw-bold text-sm align-middle">{{ item._id }}</td>
+                            <td class="px-3 fw-bold text-success align-middle">{{ item.totalInvestment.toLocaleString() }} UGX</td>
+                            <td class="px-3 text-sm align-middle">{{ item.totalTonnageBought.toLocaleString() }} kg</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div v-if="!stats" class="card border-0 shadow-sm overflow-hidden">
+        <!-- Manager only: procurement history (no current stock column) -->
+        <div v-if="isManager && procurements.length > 0" class="card border-0 shadow-sm overflow-hidden p-2 mb-4">
+            <div class="card-header bg-white border-0 py-2">
+                <h5 class="fw-bold text-dark mb-0 small text-uppercase">Procurement Log (by Produce)</h5>
+            </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-sm table-hover align-middle mb-0 kgl-compact-table">
                     <thead class="bg-light">
                         <tr>
-                            <th class="ps-4">Date/Time</th>
-                            <th>Produce</th>
-                            <th>Tonnes</th>
-                            <th>Dealer</th>
-                            <th>Total</th>
-                            <th class="pe-4 text-end">Actions</th>
+                            <th class="px-3">Date/Time</th>
+                            <th class="px-3">Produce</th>
+                            <th class="px-3">Tonnage (Purchased)</th>
+                            <th class="px-3">Dealer</th>
+                            <th class="px-3">Total</th>
+                            <th class="px-3 text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in procurements" :key="item._id">
-                            <td class="ps-4">
-                                <div class="text-dark small">{{ new Date(item.createdAt).toLocaleDateString() }}</div>
-                                <div class="text-muted extra-small">{{ new Date(item.createdAt).toLocaleTimeString([], {
-                                    hour: '2-digit', minute: '2-digit'
-                                }) }}</div>
+                            <td class="px-3 align-middle">
+                                <div class="text-dark text-sm">{{ new Date(item.createdAt).toLocaleDateString() }}</div>
+                                <div class="text-muted text-xs">{{ new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</div>
                             </td>
-                            <td>
+                            <td class="px-3 align-middle">
                                 <div class="fw-bold">{{ item.produceName }}</div>
-                                <span class="badge bg-primary-subtle text-primary small">{{ item.produceType }}</span>
+                                <span class="badge bg-primary-subtle text-primary text-xs">{{ item.produceType }}</span>
                             </td>
-                            <td>{{ item.tonnage.toLocaleString() }} kg</td>
-                            <td>
-                                <div class="text-dark small">{{ item.dealerName }}</div>
-                                <div class="text-muted extra-small">{{ item.contact }}</div>
+                            <td class="px-3 align-middle">{{ item.tonnage.toLocaleString() }} kg</td>
+                            <td class="px-3 align-middle">
+                                <div class="text-dark text-sm">{{ item.dealerName }}</div>
+                                <div class="text-muted text-xs">{{ item.contact }}</div>
                             </td>
-                            <td class="fw-bold text-success">
-                                {{ (item.tonnage * item.cost).toLocaleString() }} UGX
-                            </td>
-                            <td class="pe-4 text-end">
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-outline-primary" @click="openEditModal(item)">
-                                        <i class="fa-solid fa-pen"></i>
+                            <td class="px-3 fw-bold text-success align-middle">{{ (item.tonnage * item.cost).toLocaleString() }} UGX</td>
+                            <td class="px-3 text-end align-middle">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-sm btn-outline-primary kgl-action-btn" @click="openEditModal(item)">
+                                        <i class="fa-solid fa-pen kgl-icon-sm"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" @click="handleDelete(item._id)">
-                                        <i class="fa-solid fa-trash"></i>
+                                    <button class="btn btn-sm btn-outline-danger kgl-action-btn" @click="handleDelete(item._id)">
+                                        <i class="fa-solid fa-trash kgl-icon-sm"></i>
                                     </button>
                                 </div>
                             </td>
@@ -343,13 +367,25 @@ onMounted(fetchProcurements);
 </template>
 
 <style scoped>
-/* All your existing styles remain exactly as they were */
-.modal-overlay {
+/* KGL namespaced: ledger/compact overrides only */
+.kgl-ledger .text-xs {
+    font-size: 0.75rem;
+}
+
+.kgl-ledger :deep(.kgl-compact-table) {
+    font-size: 0.875rem;
+}
+
+.kgl-icon-sm {
+    font-size: 0.875rem;
+    width: 1rem;
+    display: inline-block;
+    text-align: center;
+}
+
+.kgl-modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(4px);
     display: flex;
@@ -358,56 +394,53 @@ onMounted(fetchProcurements);
     z-index: 1050;
 }
 
-.modal-content-custom {
+.kgl-modal-content {
     width: 95%;
     max-width: 600px;
     max-height: 85vh;
-    border-radius: 20px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
 }
 
-.modal-body-scroll {
-    overflow-y: scroll;
+.kgl-modal-body {
+    overflow-y: auto;
     flex-grow: 1;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
+.kgl-modal-body::-webkit-scrollbar {
+    width: 6px;
 }
 
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+.kgl-modal-body::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 3px;
 }
 
-.custom-toast {
+.kgl-toast {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 12px;
+    right: 12px;
     color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
+    padding: 6px 12px;
+    border-radius: 6px;
     z-index: 2000;
     font-weight: 500;
-}
-
-.extra-small {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
 }
 
 .toast-enter-active,
 .toast-leave-active {
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .toast-enter-from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-8px);
 }
 
 .toast-leave-to {
     opacity: 0;
-    transform: translateX(50px);
+    transform: translateX(24px);
 }
 </style>

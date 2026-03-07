@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import api from '@/services/api'
 
 const authStore = useAuthStore();
 const router = useRouter()
@@ -33,18 +34,13 @@ const handleLogin = async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/user/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: username.value,
-                password: password.value
-            }),
+        const response = await api.post("/user/login", {
+            username: username.value,
+            password: password.value
         })
+        const result = response.data
 
-        const result = await response.json()
-
-        if (response.ok) {
+        if (result?.status === 'success') {
             triggerToast("Login successful!", "success")
             localStorage.setItem("token", result.token)
             localStorage.setItem("userDetails", JSON.stringify(result.user))
@@ -52,12 +48,10 @@ const handleLogin = async () => {
             setTimeout(() => {
                 router.push('/admin/dashboard')
             }, 1000)
-        } else {
-            triggerToast(result.message || "Unauthorized", "error")
         }
     } catch (error) {
         console.error("Error:", error)
-        triggerToast("Server is offline or unreachable", "error")
+        triggerToast(error.response?.data?.message || "Server is offline or unreachable", "error")
     }
 }
 </script>
@@ -81,24 +75,22 @@ const handleLogin = async () => {
                 <p>Welcome back! Please enter your details</p>
             </div>
 
-            <br />
+            <form @submit.prevent="handleLogin" class="kgl-login-form">
+                <label for="UserName" class="small fw-bold">Username</label>
+                <input v-model="username" type="text" id="UserName" class="form-control form-control-sm mb-2"
+                    placeholder="Enter your username" />
 
-            <form @submit.prevent="handleLogin">
-                <label for="UserName">Username</label>
-                <input v-model="username" type="text" id="UserName" placeholder="Enter your username" />
-
-                <label for="enterPassword" class="mt-3">Password</label>
+                <label for="enterPassword" class="small fw-bold mt-2">Password</label>
                 <div class="password-wrapper">
                     <input v-model="password" :type="showPassword ? 'text' : 'password'" id="enterPassword"
-                        placeholder="Enter your password" />
+                        class="form-control form-control-sm" placeholder="Enter your password" />
                     <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" @click="showPassword = !showPassword"
-                        class="eye-icon"></i>
+                        class="eye-icon kgl-icon-sm"></i>
                 </div>
 
-                <button class="submitButton" type="submit">Login</button>
+                <button class="btn btn-sm btn-primary mt-2 w-100 kgl-login-btn" type="submit">Login</button>
 
-                <br /><br />
-                <p class="forgot-password">
+                <p class="forgot-password mt-2 mb-0">
                     <a href="#">Forgot Password?</a>
                 </p>
             </form>
@@ -146,16 +138,21 @@ const handleLogin = async () => {
     color: #666;
 }
 
-/* Toast Styling */
+/* Toast: namespaced to avoid global button/input conflicts */
 .toast-notification {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: 8px;
+    top: 12px;
+    right: 12px;
+    padding: 8px 16px;
+    border-radius: 6px;
     color: white;
     z-index: 9999;
     font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.kgl-icon-sm {
+    font-size: 0.875rem;
 }
 
 .toast-notification.success {
