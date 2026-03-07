@@ -18,13 +18,13 @@ const runTest = async () => {
 
     // 1. Test Procurement Logic
     await Produce.create({
-      produceName: 'Test Beans',
+      produceName: 'Beans',
       produceType: 'Legumes',
       tonnage: 2000,
       cost: 15000,
       sellingPrice: 20000,
       branch: 'Maganjo',
-      dealerName: 'Dealer Joe',
+      dealerName: 'Dealer Snoop',
       contact: '0700000000',
       date: new Date(),
     });
@@ -89,6 +89,7 @@ const runTest = async () => {
     process.exit(0);
   } catch (error) {
     console.error('Test Failed:', error.message);
+    console.error(error.stack);
     process.exit(1);
   }
 };
