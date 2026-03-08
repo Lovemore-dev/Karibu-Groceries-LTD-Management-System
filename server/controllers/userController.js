@@ -61,8 +61,6 @@ exports.registerUser = catchAsync(async (req, res, next) => {
     return next(new KGLError('A user with that email or username already exists', 400));
   }
 
-  // Note: If you added the .pre('save') hook to the Model as discussed,
-  // you don't need to hash here. If not, hash it now:
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -82,6 +80,25 @@ exports.registerUser = catchAsync(async (req, res, next) => {
       role: newUser.role,
       branch: newUser.branch,
     },
+  });
+});
+
+// @desc Remove a user (Director only)
+exports.removeUser = catchAsync(async (req, res, next) => {
+  // Enforce business rule
+  if (!req.user || req.user.role !== 'Director') {
+    return next(new KGLError('Only Directors can remove users', 403));
+  }
+
+  const user = await User.findByIdAndDelete(req.params.id);
+
+  if (!user) {
+    return next(new KGLError('No user found with that ID', 404));
+  }
+
+  return res.status(200).json({
+    status: 'success',
+    message: 'User removed successfully',
   });
 });
 

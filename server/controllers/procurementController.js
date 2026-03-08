@@ -124,7 +124,7 @@ exports.deleteProcurement = catchAsync(async (req, res, next) => {
   if (existing.branch !== req.user.branch) {
     return next(new KGLError('Access denied. This is not your branch.', 403));
   }
-
+  // eslint-disable-next-line no-unused-vars
   const deletedProcurement = await produce.findByIdAndDelete(req.params.id);
 
   return res.status(200).json({ status: 'success', message: 'Deleted successfully' });

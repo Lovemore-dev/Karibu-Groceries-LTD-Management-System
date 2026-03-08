@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 
 const getAuth = () => {
   const token = localStorage.getItem('token')
+
   let user = null
   try {
     user = JSON.parse(localStorage.getItem('userDetails'))
@@ -19,32 +20,32 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/admin',
       component: () => import('@/views/DashboardLayout.vue'),
       redirect: '/admin/dashboard',
       meta: { requiresAuth: true },
-      children:[
+      children: [
         {
           path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/DashboardView.vue'),
           meta: { roles: ['Director', 'Manager', 'Sales Agent'] },
         },
-         {
+        {
           path: 'procurement',
           name: 'procurement',
           component: () => import('@/views/ProcurementView.vue'),
           meta: { roles: ['Director', 'Manager'] },
         },
-         {
+        {
           path: 'sales',
           name: 'sales',
           component: () => import('@/views/SalesView.vue'),
@@ -54,16 +55,22 @@ const router = createRouter({
           path: 'inventory',
           name: 'inventory',
           component: () => import('@/views/InventoryView.vue'),
-          meta: { roles: ['Director', 'Manager'] },
+          meta: { roles: ['Director', 'Manager', 'Sales Agent'] },
         },
         {
           path: 'intelligence',
           name: 'intelligence',
           component: () => import('@/views/IntelligenceView.vue'),
           meta: { roles: ['Director'] },
-        }
-      ]
-    }
+        },
+         {
+          path: 'users',
+          name: 'User Management',
+          component: () => import('@/views/UserManagementView.vue'),
+          meta: { roles: ['Director'] },
+        },
+      ],
+    },
   ],
 })
 

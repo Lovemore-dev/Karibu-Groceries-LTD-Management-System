@@ -176,8 +176,8 @@ exports.getAllSales = catchAsync(async (req, res) => {
       .status(200)
       .json({ status: 'success', role: 'Director', cashAggregations, creditAggregations });
   }
-
-  const query = { branch: req.user.branch.trim() };
+  const userBranch = req.user.branch ? req.user.branch.trim() : null;
+  const query = userBranch ? { branch: userBranch } : {};
   const cashSales = await Sale.find(query).sort({ createdAt: -1 });
   const creditSales = await CreditSale.find(query).sort({ createdAt: -1 });
 
@@ -188,8 +188,12 @@ exports.getAllSales = catchAsync(async (req, res) => {
 // - Staff (Manager / Sales Agent): scoped to their branch
 // - Director: can request per-branch via ?branch=Maganjo|Matugga, otherwise returns all-branch breakdown
 exports.getAvailableStock = catchAsync(async (req, res) => {
-  const produceName = req.query.produceName?.trim();
-  const branchQuery = req.query.branch?.trim();
+  const produceName =
+    req.query.produceName && typeof req.query.produceName === 'string'
+      ? req.query.produceName.trim()
+      : undefined;
+  const branchQuery =
+    req.query.branch && typeof req.query.branch === 'string' ? req.query.branch.trim() : null;
 
   const match = { currentInventory: { $gt: 0 } };
 
@@ -229,7 +233,8 @@ exports.getAvailableStock = catchAsync(async (req, res) => {
     const totalAvailable = row ? row.totalAvailable : 0;
     // Get selling price from first available batch for amount preview on frontend
     const firstBatch = await Produce.findOne(match).select('sellingPrice').lean();
-    const sellingPricePerKg = firstBatch?.sellingPrice ? firstBatch.sellingPrice : null;
+    const sellingPricePerKg =
+      firstBatch && firstBatch.sellingPrice ? firstBatch.sellingPrice : null;
     return res.status(200).json({
       status: 'success',
       data: {

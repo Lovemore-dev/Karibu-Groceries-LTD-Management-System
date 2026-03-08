@@ -28,7 +28,7 @@ router.use(protect);
 router
   .route('/')
   // @desc Get all procurements
-  .get(restrictTo('Manager', 'Director'), procurementController.getAllProcurements);
+  .get(restrictTo('Manager', 'Director', 'Sales Agent'), procurementController.getAllProcurements);
 
 /**
  * @swagger

@@ -4,10 +4,15 @@
             <h2 class="page-title mb-0">
                 <span v-if="isDirector">Executive Overview</span>
                 <span v-else-if="isManager">Branch Operations</span>
-                <span v-else>Your Sales Summary</span>
+                <span v-else-if="isSalesAgent">Your Sales Summary</span>
             </h2>
-            <button v-if="!isDirector" class="btn btn-sm btn-success kgl-action-btn" @click="router.push('/admin/sales')">
+            <button v-if="!isDirector" class="btn btn-sm btn-success kgl-action-btn"
+                @click="router.push('/admin/sales')">
                 <i class="fa-solid fa-plus me-1 kgl-icon-sm"></i>New Sale
+            </button>
+            <button v-if="!isDirector && !isSalesAgent" class="btn btn-sm btn-primary kgl-action-btn"
+                @click="router.push('/admin/procurement')">
+                <i class="fa-solid fa-plus me-1 kgl-icon-sm"></i>New procurement
             </button>
         </div>
 
@@ -55,7 +60,8 @@
                     </div>
                     <div class="kgl-stat-content">
                         <span class="kgl-stat-label">Outstanding Credit</span>
-                        <h3 class="kgl-stat-value text-danger mb-0">{{ directorOutstandingCredit.toLocaleString() }} UGX</h3>
+                        <h3 class="kgl-stat-value text-danger mb-0">{{ directorOutstandingCredit.toLocaleString() }} UGX
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -94,10 +100,14 @@
                             <tbody>
                                 <tr v-for="row in directorBranchPerformance" :key="row.branch">
                                     <td class="px-3 fw-bold text-sm align-middle">{{ row.branch }}</td>
-                                    <td class="px-3 text-sm align-middle">{{ row.totalTonnageBought.toLocaleString() }} kg</td>
-                                    <td class="px-3 fw-bold align-middle">{{ row.totalInvestment.toLocaleString() }} UGX</td>
-                                    <td class="px-3 fw-bold text-success align-middle">{{ row.cashRevenue.toLocaleString() }} UGX</td>
-                                    <td class="px-3 fw-bold text-danger align-middle">{{ row.creditOwed.toLocaleString() }} UGX</td>
+                                    <td class="px-3 text-sm align-middle">{{ row.totalTonnageBought.toLocaleString() }}
+                                        kg</td>
+                                    <td class="px-3 fw-bold align-middle">{{ row.totalInvestment.toLocaleString() }} UGX
+                                    </td>
+                                    <td class="px-3 fw-bold text-success align-middle">{{
+                                        row.cashRevenue.toLocaleString() }} UGX</td>
+                                    <td class="px-3 fw-bold text-danger align-middle">{{ row.creditOwed.toLocaleString()
+                                    }} UGX</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -157,18 +167,22 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="sale in branchCashSales.slice(0, 5)" :key="sale._id">
-                                        <td class="px-3 text-sm text-muted align-middle">{{ new Date(sale.date).toLocaleDateString() }}</td>
+                                        <td class="px-3 text-sm text-muted align-middle">{{ new
+                                            Date(sale.date).toLocaleDateString() }}</td>
                                         <td class="px-3 text-sm align-middle">{{ sale.buyersName }}</td>
                                         <td class="px-3 text-sm align-middle">{{ sale.produceName }}</td>
                                         <td class="px-3 align-middle">{{ sale.tonnage.toLocaleString() }} kg</td>
-                                        <td class="px-3 fw-bold text-success align-middle">{{ sale.amountPaid.toLocaleString() }} UGX</td>
+                                        <td class="px-3 fw-bold text-success align-middle">{{
+                                            sale.amountPaid.toLocaleString() }} UGX</td>
                                     </tr>
                                     <tr v-for="sale in branchCreditSales.slice(0, 5)" :key="sale._id + '-credit'">
-                                        <td class="px-3 text-sm text-muted align-middle">{{ new Date(sale.dueDate).toLocaleDateString() }}</td>
+                                        <td class="px-3 text-sm text-muted align-middle">{{ new
+                                            Date(sale.dueDate).toLocaleDateString() }}</td>
                                         <td class="px-3 text-sm align-middle">{{ sale.buyersName }}</td>
                                         <td class="px-3 text-sm align-middle">{{ sale.produceName }}</td>
                                         <td class="px-3 align-middle">{{ sale.tonnage.toLocaleString() }} kg</td>
-                                        <td class="px-3 fw-bold text-warning align-middle">{{ sale.amountDue.toLocaleString() }} UGX</td>
+                                        <td class="px-3 fw-bold text-warning align-middle">{{
+                                            sale.amountDue.toLocaleString() }} UGX</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -198,10 +212,12 @@
                             </thead>
                             <tbody>
                                 <tr v-for="sale in myCashSales.slice(0, 8)" :key="sale._id">
-                                    <td class="px-3 text-sm text-muted align-middle">{{ new Date(sale.date).toLocaleDateString() }}</td>
+                                    <td class="px-3 text-sm text-muted align-middle">{{ new
+                                        Date(sale.date).toLocaleDateString() }}</td>
                                     <td class="px-3 text-sm align-middle">{{ sale.produceName }}</td>
                                     <td class="px-3 align-middle">{{ sale.tonnage.toLocaleString() }} kg</td>
-                                    <td class="px-3 fw-bold text-success align-middle">{{ sale.amountPaid.toLocaleString() }} UGX</td>
+                                    <td class="px-3 fw-bold text-success align-middle">{{
+                                        sale.amountPaid.toLocaleString() }} UGX</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -226,10 +242,12 @@
                             </thead>
                             <tbody>
                                 <tr v-for="sale in myCreditSales.slice(0, 8)" :key="sale._id">
-                                    <td class="px-3 text-sm text-muted align-middle">{{ new Date(sale.dueDate).toLocaleDateString() }}</td>
+                                    <td class="px-3 text-sm text-muted align-middle">{{ new
+                                        Date(sale.dueDate).toLocaleDateString() }}</td>
                                     <td class="px-3 text-sm align-middle">{{ sale.produceName }}</td>
                                     <td class="px-3 align-middle">{{ sale.tonnage.toLocaleString() }} kg</td>
-                                    <td class="px-3 fw-bold text-warning align-middle">{{ sale.amountDue.toLocaleString() }} UGX</td>
+                                    <td class="px-3 fw-bold text-warning align-middle">{{
+                                        sale.amountDue.toLocaleString() }} UGX</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -268,32 +286,39 @@ const isSalesAgent = computed(() => userRole.value === 'Sales Agent');
 
 const fetchData = async () => {
     try {
-        const calls = [api.get('/procurements')];
+        const salesPromise = api.get('/sales').catch(err => {
+            console.warn("Could not fetch sales", err);
+            return { data: { cashSales: [], creditSales: [], cashAggregations: [], creditAggregations: [] } };
+        });
 
-        if (isDirector.value) {
-            calls.push(api.get('/user/director/totals'));
-            calls.push(api.get('/sales'));
-        } else {
-            // Manager or Sales Agent: need branch-level sales only
-            calls.push(api.get('/sales'));
+        let procPromise = Promise.resolve({ data: { data: [], stats: [] } });
+        if (isDirector.value || isManager.value) {
+            procPromise = api.get('/procurements').catch(err => {
+                console.warn("Procurement access restricted.", err);
+                return { data: { data: [], stats: [] } };
+            });
         }
 
-        const [procRes, secondRes, thirdRes] = await Promise.all(calls);
+        let totalsPromise = Promise.resolve({ data: { data: null } });
+        if (isDirector.value) {
+            totalsPromise = api.get('/user/director/totals').catch(err => {
+                console.error("Failed to fetch director totals", err);
+                return { data: { data: null } };
+            });
+        }
+
+        const [procRes, salesRes, totalsRes] = await Promise.all([procPromise, salesPromise, totalsPromise]);
 
         procurements.value = procRes.data.data;
         stats.value = procRes.data.stats || [];
 
         if (isDirector.value) {
-            const totalsRes = secondRes;
-            const salesRes = thirdRes;
             directorTotals.value = totalsRes?.data?.data || null;
             directorSalesAgg.value = {
                 cash: salesRes?.data?.cashAggregations || [],
                 credit: salesRes?.data?.creditAggregations || [],
             };
         } else {
-            directorTotals.value = null;
-            const salesRes = secondRes;
             const branchCash = salesRes?.data?.cashSales || [];
             const branchCredit = salesRes?.data?.creditSales || [];
 
@@ -302,7 +327,7 @@ const fetchData = async () => {
                 branchCreditSales.value = branchCredit;
             } else if (isSalesAgent.value) {
                 const fullName = authStore.user?.fullName;
-                myCashSales.value = fullName ? branchCash.filter((s) => s.saleAgent === fullName) : [];
+                myCashSales.value = fullName ? branchCash.filter((s) => s.saleAgent?.trim().toLowerCase() === fullName.trim().toLowerCase()) : [];
                 myCreditSales.value = fullName ? branchCredit.filter((s) => s.saleAgent === fullName) : [];
             }
         }
@@ -310,7 +335,6 @@ const fetchData = async () => {
         console.error('Failed to load dashboard data', err);
     }
 };
-
 const totalAssetValue = computed(() => {
     return stats.value.reduce((acc, curr) => acc + (curr.currentAssetValue || 0), 0);
 });
