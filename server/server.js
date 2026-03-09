@@ -50,7 +50,10 @@ const swaggerDefinition = {
     description: 'API documentation for Karibu Groceries LTD',
   },
   servers: [
-    { url: process.env.BASE_URL || `http://localhost:${port}`, description: 'Development server' },
+    {
+      url: process.env.BASE_URL || `https://karibu-groceries-ltd-management-system.onrender.com`,
+      description: 'Development server',
+    },
   ],
   components: {
     securitySchemes: {
