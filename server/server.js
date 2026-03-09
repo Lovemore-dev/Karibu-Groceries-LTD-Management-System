@@ -51,7 +51,12 @@ const swaggerDefinition = {
   },
   servers: [
     {
+      // This will use the URL Render provides, or fall back to localhost
       url: process.env.BASE_URL || `https://karibu-groceries-ltd-management-system.onrender.com`,
+      description: 'Production server',
+    },
+    {
+      url: 'http://localhost:3000',
       description: 'Development server',
     },
   ],
