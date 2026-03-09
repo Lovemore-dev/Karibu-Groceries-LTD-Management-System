@@ -73,7 +73,7 @@ const produceSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-produceSchema.pre('save', function () {
+produceSchema.pre('save', function myPreSave() {
   // Safety net: ensure selling price is not below unit cost
   if (typeof this.cost === 'number' && typeof this.tonnage === 'number' && this.tonnage > 0) {
     const unitCost = this.cost / this.tonnage;
