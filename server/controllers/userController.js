@@ -83,9 +83,35 @@ exports.registerUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// @desc Update a user (Director only)
+exports.updateUser = catchAsync(async (req, res, next) => {
+  // 1. Check permissions
+  if (!req.user || req.user.role !== 'Director') {
+    return next(new KGLError('Only Directors can update users', 403));
+  }
+
+  // 2. Filter out password updates (should be a separate "reset password" flow)
+  const { password, ...updateData } = req.body;
+
+  const user = await User.findByIdAndUpdate(req.params.id, updateData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    return next(new KGLError('No user found with that ID', 404));
+  }
+
+  return res.status(200).json({
+    status: 'success',
+    data: user,
+  });
+});
+
+// @desc Delete a user (Director only)
 // @desc Remove a user (Director only)
 exports.removeUser = catchAsync(async (req, res, next) => {
-  // Enforce business rule
+  // 1. Business rule: only Directors can remove users
   if (!req.user || req.user.role !== 'Director') {
     return next(new KGLError('Only Directors can remove users', 403));
   }
@@ -101,7 +127,6 @@ exports.removeUser = catchAsync(async (req, res, next) => {
     message: 'User removed successfully',
   });
 });
-
 // @desc Get financial totals for Director view
 exports.getDirectorTotals = catchAsync(async (req, res, next) => {
   const totalCash = await Sale.aggregate([

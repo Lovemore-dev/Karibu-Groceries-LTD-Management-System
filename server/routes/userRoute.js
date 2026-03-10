@@ -102,6 +102,12 @@ router.get('/', protect, restrictTo('Director'), userController.getAllUsers);
  *                 outstandingCredit: { type: number }
  *                 reportGeneratedAt: { type: string, format: date-time }
  */
+// DELETE route for removing users
+router.delete('/:id', protect, restrictTo('Director'), userController.removeUser);
+
+// PATCH route for updating users
+router.patch('/:id', protect, restrictTo('Director'), userController.updateUser);
+
 // This route serves the "Director's View"
 router.get('/director/totals', protect, restrictTo('Director'), userController.getDirectorTotals);
 module.exports = router;

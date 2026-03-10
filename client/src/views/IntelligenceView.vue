@@ -89,19 +89,7 @@
                             </div>
                         </div>
 
-                        <div class="kgl-insight-item mb-2">
-                            <small class="text-slate-light d-block text-uppercase small fw-bold mb-0">Performance</small>
-                            <div class="d-flex justify-content-between align-items-center small">
-                                <span>System Efficiency</span>
-                                <span class="text-emerald fw-bold">Optimal</span>
-                            </div>
-                        </div>
-
-                        <div class="mt-auto pt-2">
-                            <button class="btn btn-sm btn-emerald w-100 py-2 rounded fw-bold kgl-action-btn">
-                                <i class="fa-solid fa-file-pdf me-1 kgl-icon-sm"></i> Export Report
-                            </button>
-                        </div>
+                    
                     </div>
                 </div>
             </div>

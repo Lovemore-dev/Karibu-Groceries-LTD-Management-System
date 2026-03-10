@@ -7,7 +7,7 @@ const produceSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Produce name is required'],
       match: [/^[a-zA-Z0-9 ]+$/, 'Produce name must be alpha-numeric'],
-      enum: ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'],
+      enum: ['Beans', 'Grain Maize', 'Cow peas', 'G nuts', 'Soybeans'],
     },
     // Type: alphabets only, not less than 2 characters, not empty
     produceType: {

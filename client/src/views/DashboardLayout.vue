@@ -70,11 +70,7 @@
                 </div>
 
                 <div class="header-right">
-                    <div class="header-search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search transactions..." />
-                    </div>
-
+               
                     <div class="v-divider"></div>
 
                     <div class="user-dropdown">
@@ -89,9 +85,7 @@
                         </div>
 
                         <div class="dropdown-content">
-                            <div class="dropdown-header">Account</div>
-                            <button class="dropdown-link"><i class="fa-solid fa-user-gear"></i> Profile</button>
-                            <hr />
+                            <div class="dropdown-header"></div>
                             <button @click="logout" class="dropdown-link logout-link">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
                             </button>

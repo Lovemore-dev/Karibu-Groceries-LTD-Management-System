@@ -18,7 +18,7 @@ const isDirector = computed(() => authStore.user?.role === 'Director');
 const userBranch = computed(() => authStore.user?.branch || '');
 
 // Match Produce.js model enums for dropdowns
-const PRODUCE_NAMES = ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'];
+const PRODUCE_NAMES = ['Beans', 'Grain Maize', 'Cow peas', 'G nuts', 'Soybeans'];
 const PRODUCE_TYPES = ['Legume', 'Cereal'];
 
 // --- Toast System ---

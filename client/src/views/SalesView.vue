@@ -22,7 +22,7 @@ const stockMessage = ref('');
 const sellingPricePerKg = ref(null); // from stock API for amount preview
 
 // Sale.js produceName enum
-const PRODUCE_NAMES = ['Beans', 'Grain Maize', 'Cow peas', 'G-nuts', 'Soybeans'];
+const PRODUCE_NAMES = ['Beans', 'Grain Maize', 'Cow peas', 'G nuts', 'Soybeans'];
 
 // --- Form State ---
 const formData = reactive({
@@ -315,7 +315,7 @@ onMounted(fetchData);
                             <div class="form-control form-control-sm bg-light fw-bold text-success">
                                 {{ amountPaidDisplay.toLocaleString() }} UGX
                             </div>
-                            <div class="form-text text-muted small">Based on current selling price; final amount may vary with FIFO.</div>
+                            <div class="form-text text-muted small">Each kilogram sold at {{ sellingPricePerKg }} UGX.</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold">Buyer's Name</label>
@@ -352,7 +352,6 @@ onMounted(fetchData);
                             <div class="col-12">
                                 <label class="form-label small fw-bold">Date of Dispatch</label>
                                 <input :value="new Date().toLocaleDateString()" type="text" class="form-control form-control-sm bg-light" disabled>
-                                <div class="form-text text-muted small">Saved as <strong>dispatchDate</strong> in the backend.</div>
                             </div>
                         </template>
 

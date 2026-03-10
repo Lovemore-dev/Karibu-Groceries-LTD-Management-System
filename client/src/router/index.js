@@ -19,12 +19,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: HomeView,
     },
     {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: LoginView,
     },
     {
@@ -35,31 +35,31 @@ const router = createRouter({
       children: [
         {
           path: 'dashboard',
-          name: 'dashboard',
+          name: 'Dashboard',
           component: () => import('@/views/DashboardView.vue'),
           meta: { roles: ['Director', 'Manager', 'Sales Agent'] },
         },
         {
           path: 'procurement',
-          name: 'procurement',
+          name: 'Procurement',
           component: () => import('@/views/ProcurementView.vue'),
           meta: { roles: ['Director', 'Manager'] },
         },
         {
           path: 'sales',
-          name: 'sales',
+          name: 'Sales',
           component: () => import('@/views/SalesView.vue'),
           meta: { roles: ['Director', 'Manager', 'Sales Agent'] },
         },
         {
           path: 'inventory',
-          name: 'inventory',
+          name: 'Inventory',
           component: () => import('@/views/InventoryView.vue'),
           meta: { roles: ['Director', 'Manager', 'Sales Agent'] },
         },
         {
           path: 'intelligence',
-          name: 'intelligence',
+          name: 'Intelligence',
           component: () => import('@/views/IntelligenceView.vue'),
           meta: { roles: ['Director'] },
         },

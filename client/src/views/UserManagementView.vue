@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, inject, computed } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import api from '@/services/api';
 import Swal from 'sweetalert2';
 
@@ -10,7 +10,7 @@ const submitting = ref(false);
 const showModal = ref(false);
 const isEditing = ref(false);
 const currentId = ref(null);
-const userRole = inject('userRole'); // Injected from DashboardLayout
+// const userRole = inject('userRole');
 
 // --- Toast System ---
 const toast = reactive({ show: false, message: '', type: 'success' });
@@ -27,7 +27,11 @@ const formData = reactive({
 });
 
 const resetForm = () => {
-    Object.assign(formData, { fullName: '', username: '', email: '', password: '', role: 'Sales Agent', branch: 'Maganjo' });
+    isEditing.value = false;
+    currentId.value = null;
+    Object.assign(formData, {
+        fullName: '', username: '', email: '', password: '', role: 'Sales Agent', branch: 'Maganjo'
+    });
 };
 
 // --- Actions ---
@@ -43,12 +47,27 @@ const fetchUsers = async () => {
     }
 };
 
+const editUser = (user) => {
+    isEditing.value = true;
+    currentId.value = user._id;
+    Object.assign(formData, {
+        fullName: user.fullName,
+        username: user.username,
+        email: user.email,
+        password: '', // Keep empty for security unless changing
+        role: user.role,
+        branch: user.branch
+    });
+    showModal.value = true;
+};
+
 const handleSave = async () => {
     try {
         submitting.value = true;
         if (isEditing.value) {
-            // Note: Update logic would go here if implemented in controller
-            triggerToast("Update feature coming soon", "warning");
+            // Call the PATCH route we just fixed in the backend
+            await api.patch(`/user/${currentId.value}`, formData);
+            triggerToast("User updated successfully", "success");
         } else {
             await api.post('/user/register', formData);
             triggerToast("User registered successfully", "success");
@@ -75,11 +94,12 @@ const handleDelete = async (id, name) => {
 
     if (result.isConfirmed) {
         try {
+            // Note: using _id as per MongoDB standard
             await api.delete(`/user/${id}`);
             await fetchUsers();
             triggerToast("User removed successfully", "success");
         } catch (err) {
-            triggerToast("Failed to delete user", "danger",err);
+            triggerToast(err.response?.data?.message || "Failed to delete user", "danger");
         }
     }
 };
@@ -99,7 +119,8 @@ onMounted(fetchUsers);
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-dark mb-0">User Management</h2>
-            <button class="btn btn-sm btn-primary rounded-pill px-3 kgl-action-btn" @click="showModal = true">
+            <button class="btn btn-sm btn-primary rounded-pill px-3 kgl-action-btn"
+                @click="resetForm(); showModal = true">
                 <i class="fa-solid fa-user-plus me-1 kgl-icon-sm"></i> Add New User
             </button>
         </div>
@@ -107,11 +128,11 @@ onMounted(fetchUsers);
         <div v-if="showModal" class="kgl-modal-overlay" @click.self="showModal = false">
             <div class="kgl-modal-content card shadow border-0 p-2">
                 <div class="card-header bg-white border-0 py-2 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-sm">Register User</h5>
+                    <h5 class="mb-0 fw-bold text-sm">{{ isEditing ? 'Edit User' : 'Register User' }}</h5>
                     <button class="btn-close btn-sm" @click="showModal = false"></button>
                 </div>
                 <div class="kgl-modal-body p-2 pt-0">
-                    <form @submit.prevent="handleSave" class="row g-3">
+                    <form @submit.prevent="handleSave" id="userForm" class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Full Name</label>
                             <input v-model="formData.fullName" type="text" class="form-control form-control-sm bg-light"
@@ -127,7 +148,7 @@ onMounted(fetchUsers);
                             <input v-model="formData.email" type="email" class="form-control form-control-sm bg-light"
                                 required>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" v-if="!isEditing">
                             <label class="form-label small fw-bold">Password</label>
                             <input v-model="formData.password" type="password"
                                 class="form-control form-control-sm bg-light" required>
@@ -153,8 +174,9 @@ onMounted(fetchUsers);
                 <div class="card-footer bg-white text-end py-2 border-0">
                     <button class="btn btn-sm btn-link text-muted me-2 text-decoration-none"
                         @click="showModal = false">Cancel</button>
-                    <button @click="handleSave" class="btn btn-sm btn-success px-3 rounded-pill" :disabled="submitting">
-                        {{ submitting ? 'Saving...' : 'Confirm Registration' }}
+                    <button type="submit" form="userForm" class="btn btn-sm btn-success px-3 rounded-pill"
+                        :disabled="submitting">
+                        {{ submitting ? 'Saving...' : (isEditing ? 'Update User' : 'Confirm Registration') }}
                     </button>
                 </div>
             </div>
@@ -185,6 +207,10 @@ onMounted(fetchUsers);
                             </td>
                             <td class="px-3 text-sm">{{ user.branch }}</td>
                             <td class="px-3 text-end">
+                                <button class="btn btn-sm btn-outline-primary me-2 kgl-action-btn"
+                                    @click="editUser(user)">
+                                    <i class="fa-solid fa-pen-to-square kgl-icon-sm"></i>
+                                </button>
                                 <button class="btn btn-sm btn-outline-danger kgl-action-btn"
                                     @click="handleDelete(user._id, user.fullName)">
                                     <i class="fa-solid fa-trash kgl-icon-sm"></i>
@@ -199,7 +225,7 @@ onMounted(fetchUsers);
 </template>
 
 <style scoped>
-/* Reuse the existing KGL design classes */
+/* Styles remain unchanged as they were already correct */
 .kgl-ledger .text-xs {
     font-size: 0.75rem;
 }
