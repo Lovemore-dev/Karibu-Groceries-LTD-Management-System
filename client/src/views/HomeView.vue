@@ -15,7 +15,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a href="mailto:" class="btn btn-secondary me-2">Request Access</a>
+                                <a href="mailto:director.admin@kgl.com" class="btn btn-secondary me-2">Request Access</a>
                             </li>
                             <li class="nav-item">
                                 <router-link to="/login" class="btn btn-primary">Login</router-link>
@@ -33,7 +33,7 @@
                 <p>The official management portal for Karibu Groceries Limited</p>
                 <div class="callButtons">
                     <router-link to="/login" class="btn btn-lg btn-success me-2">Log In to Your Account</router-link>
-                    <a href="mailto:" style="background-color: grey;" class="btn btn-lg btn-outline-dark">Request Access</a>
+                    <a href="mailto:director.admin@kgl.com" style="background-color: grey;" class="btn btn-lg btn-outline-dark">Request Access</a>
                 </div>
             </div>
         </section>

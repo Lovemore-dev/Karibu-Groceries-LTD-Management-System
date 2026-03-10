@@ -91,7 +91,7 @@ const handleLogin = async () => {
                 <button class="btn btn-sm btn-primary mt-2 w-100 kgl-login-btn" type="submit">Login</button>
 
                 <p class="forgot-password mt-2 mb-0">
-                    <a href="#">Forgot Password?</a>
+                    <a href="mailto:director.admin@kgl.com">Forgot Password?</a>
                 </p>
             </form>
         </div>
