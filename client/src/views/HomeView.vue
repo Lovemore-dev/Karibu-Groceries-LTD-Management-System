@@ -14,8 +14,6 @@
 
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                             <li class="nav-item">
                                 <a href="mailto:" class="btn btn-secondary me-2">Request Access</a>
                             </li>
