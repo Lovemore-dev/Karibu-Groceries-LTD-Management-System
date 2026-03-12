@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: import.meta.env.BASE_URL || 'http://localhost:3000/api',
 })
 
 // Automatically attach token to every request
