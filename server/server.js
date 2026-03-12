@@ -31,6 +31,10 @@ app.use(cors());
 // Helps with EJS form submissions
 app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT;
+
+app.use('/', (req, res) => {
+  res.json({ message: 'Welcome to the Karibu Groceries LTD API' });
+});
 // Router 1: Procurement (/api/procurements)
 app.use('/api/procurements', require('./routes/procurementRoute'));
 
